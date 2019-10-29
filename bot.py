@@ -18,7 +18,7 @@ def message_handler(bot: Bot, update: Update):
 	text = update.effective_message.text
 	reply_text = f'Ну здарова {name}\n\n{text}'
 
-	if '/$' in text:
+	if '/dol' in text:
 		print('zhopa')
 		headers = {'accept': '*/*',
 				   "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"}
@@ -50,22 +50,28 @@ def message_handler(bot: Bot, update: Update):
 			soup = bs(request.content, 'html.parser')
 			divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
 			counter = 0
+			out_divka = str
 			response = ''
 			for div in divs:
 				counter += 1
 				divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
-
+				divka_https = div.find('a', href=True)
 				# print(f'{counter})', divka)
 				# divkaa = str(divka)
 				# print(type(divkaa))
 				# divss = str(divs)
 				# print(type(divs))
+				mod_divka_https = divka_https['href']
 
 				def result(divka):
 					return '\n'.join(str(divka) for i in range(1))
 
-				response += f'{counter})' + str(result(divka)) + '\n'
-			# ''.join(random.choice(chars) for i in range(size))
+				def result_https(mod_divka_https):
+					return '\n'.join(str(mod_divka_https) for i in range(1))
+
+				response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https)}\n"
+			
+			#print(response)
 
 			reply_text = response
 	bot.send_message(
