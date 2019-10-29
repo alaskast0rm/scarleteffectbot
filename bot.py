@@ -7,7 +7,7 @@ import random
 import datetime
 import time
 
-TG_TOKEN = ''
+TG_TOKEN = '968188661:AAEF4JBqD5OzPDK9I2LfTeQp-Jlr_Zd37u4'
 
 
 def message_handler(bot: Bot, update: Update):
