@@ -37,7 +37,37 @@ def message_handler(bot: Bot, update: Update):
 				divka = div.find('div', attrs={'class': "currency-table__large-text"}).text
 				divka1 = divka + 'RUB за 1$'
 				reply_text = divka1
+	if '/hh' in text:
+		url = 'https://velikie-luki.hh.ru/search/vacancy?only_with_salary=false&clusters=true&area=1&enable_snippets=true&salary=&st=searchVacancy&text=Python+junior'
 
+		headers = {'accept': '*/*',
+				   "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"}
+
+		session = requests.Session()
+		request = session.get(url, headers=headers)
+		if request.status_code == 200:
+
+			soup = bs(request.content, 'html.parser')
+			divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
+			counter = 0
+			response = ''
+			for div in divs:
+				counter += 1
+				divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
+
+				# print(f'{counter})', divka)
+				# divkaa = str(divka)
+				# print(type(divkaa))
+				# divss = str(divs)
+				# print(type(divs))
+
+				def result(divka):
+					return '\n'.join(str(divka) for i in range(1))
+
+				response += f'{counter})' + str(result(divka)) + '\n'
+			# ''.join(random.choice(chars) for i in range(size))
+
+			reply_text = response
 	bot.send_message(
 		chat_id=update.effective_message.chat_id,
 		text=reply_text,
