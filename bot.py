@@ -3,9 +3,8 @@ from telegram import Update
 from telegram.ext import Updater
 from telegram.ext import MessageHandler
 from telegram.ext import Filters
-import random
-import datetime
-import time
+import requests
+from bs4 import BeautifulSoup as bs
 
 TG_TOKEN = '968188661:AAEF4JBqD5OzPDK9I2LfTeQp-Jlr_Zd37u4'
 
@@ -18,43 +17,27 @@ def message_handler(bot: Bot, update: Update):
 		name = 'анонимыч'
 	text = update.effective_message.text
 	reply_text = f'Ну здарова {name}\n\n{text}'
-# 	if '/go' in text:
-# 		local_time = datetime.datetime.now()
-# 		for_server_time = datetime.timedelta(hours=3)
-# 		server_time = local_time + for_server_time
-# 		aha = str(server_time)
-# 		split_date = aha.split('-')[0]
-# 		sd = int(split_date)
-# 		split_date1 = aha.split('-')[1]
-# 		sd1 = int(split_date1)
-# 		split_date2 = aha.split('-')[2]
-# 		sd2_0 = split_date2
-# 		sd2_1 = sd2_0.split(' ')[0]
-# 		sd2_2 = int(sd2_1)
-# 		target = datetime.datetime(sd, sd1, sd2_2, 8, 0, 10)
 
-# 		difference = target - server_time
-# 		seconds = difference.seconds
-# 		time.sleep(seconds)
+	if '/$' in text:
+		print('zhopa')
+		headers = {'accept': '*/*',
+				   "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"}
 
-# 		# if '/me' in text:
-# 		# return 0
-# 		# if 'саша' or 'санек' or 'саня' in text:
-# 		# sasha = 'Ну да это санька сашка саня\n'
-# 		# else:
-# 		# sasha = ''
-# 		# vstavochka = ['ну да как всегда смешно', 'ахахахах смешно да', 'хахахаха котики смешно']
-# 		# random_vstavochka = random.choice(vstavochka)
-# 		# reply_text = f'{random_vstavochka} -->{name}\n\n{text}\n'
-# 		reply_text = ("Доброе утро кролики! :)\n\n"
-# 					  "Желаю утра доброго\n"
-# 					  "И солнечных лучей,\n"
-# 					  "Улыбок притягательных,\n"
-# 					  "Приятных мелочей.\n\n"
-# 					  "Пусть настроенье доброе\n"
-# 					  "Весь день не подведет,\n"
-# 					  "Заставит быстро двигаться\n"
-# 					  "Лишь вверх и лишь вперед.")
+		url = 'https://www.banki.ru/products/currency/usd/'
+
+		# def bank(url, headers):
+		sesion = requests.Session()
+		request = sesion.get(url, headers=headers)
+		if request.status_code == 200:
+			soup = bs(request.content, 'html.parser')
+			divs = soup.find_all('div', attrs={'class': 'layout-columns-wrapper'})
+			print('ok')
+
+			for div in divs:
+				divka = div.find('div', attrs={'class': "currency-table__large-text"}).text
+				divka1 = divka + 'RUB за 1$'
+				reply_text = divka1
+
 	bot.send_message(
 		chat_id=update.effective_message.chat_id,
 		text=reply_text,
@@ -77,7 +60,5 @@ def main():
 	updater.idle()
 	print('Finish')
 
-
 if __name__ == '__main__':
 	main()
-
