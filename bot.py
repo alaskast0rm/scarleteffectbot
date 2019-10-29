@@ -76,7 +76,7 @@ def message_handler(bot: Bot, update: Update):
 	if '/cat' in text:
 		url = 'https://random.cat/view/'
 		number = random.randint(1, 1500)
-		reply_text = url + number
+		reply_text = url + str(number)
 
 	bot.send_message(
 		chat_id=update.effective_message.chat_id,
