@@ -84,17 +84,10 @@ def message_handler(bot: Bot, update: Update):
 		text=reply_text,
 	)
 	if '/bc' in text:
-		driver = webdriver.Chrome()
-
-		driver.get('https://coinmarketcap.com/currencies/bitcoin/')
-
-		button = driver.find_element_by_class_name("highcharts-button.cmc-chart__button.highcharts-button-normal")
-
-		button.click()
-
-		bot.send_message(
+		
+		bot.send_photo(
 			chat_id=udate.effective_message.chat_id,
-			text=driver.title,
+			text="https://www.tradingview.com/x/2D4tS4y6",
 		)
 
 	
