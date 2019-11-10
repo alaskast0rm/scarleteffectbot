@@ -73,21 +73,26 @@ def message_handler(bot: Bot, update: Update):
 				response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https)}\n"
 			reply_text = response
 	# print(response)
-
+	bot.send_message(
+		chat_id=update.effective_message.chat_id,
+		text=reply_text,
+		
 	if '/cat' in text:
 		url = 'https://random.cat/view/'
 		number = random.randint(1, 1500)
 		reply_text = url + str(number)
+		bot.send_photo(
+			chat_id=update.effective_message.chat_id,
+			photo=reply_text,
+		)
 
-	bot.send_message(
-		chat_id=update.effective_message.chat_id,
-		text=reply_text,
-	)
+	
+	
 	if '/bc' in text:
-		
+		photo_url = "https://www.tradingview.com/x/2D4tS4y6"
 		bot.send_photo(
 			chat_id=udate.effective_message.chat_id,
-			text="https://www.tradingview.com/x/2D4tS4y6",
+			photo=photo_url,
 		)
 
 	
