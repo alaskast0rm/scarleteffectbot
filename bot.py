@@ -6,6 +6,7 @@ from telegram.ext import Filters
 import requests
 from bs4 import BeautifulSoup as bs
 import random
+from selenium import webdriver
 
 TG_TOKEN = '968188661:AAEF4JBqD5OzPDK9I2LfTeQp-Jlr_Zd37u4'
 
@@ -82,6 +83,21 @@ def message_handler(bot: Bot, update: Update):
 		chat_id=update.effective_message.chat_id,
 		text=reply_text,
 	)
+	if '/bc' in text:
+		driver = webdriver.Chrome()
+
+		driver.get('https://coinmarketcap.com/currencies/bitcoin/')
+
+		button = driver.find_element_by_class_name("highcharts-button.cmc-chart__button.highcharts-button-normal")
+
+		button.click()
+
+		bot.send_message(
+			chat_id=udate.effective_message.chat_id,
+			text=driver.title,
+		)
+
+	
 
 
 def main():
