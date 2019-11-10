@@ -40,6 +40,11 @@ def message_handler(bot: Bot, update: Update):
 				divka = div.find('div', attrs={'class': "currency-table__large-text"}).text
 				divka1 = divka + 'RUB за 1$'
 				reply_text = divka1
+		bot.send_message(
+				chat_id=update.effective_message.chat_id,
+				text=reply_text,
+			)
+		
 	if '/hh' in text:
 		url = 'https://hh.ru/search/vacancy?only_with_salary=false&clusters=true&area=1&enable_snippets=true&salary=&st=searchVacancy&text=Python+junior'
 
@@ -72,10 +77,12 @@ def message_handler(bot: Bot, update: Update):
 
 				response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https)}\n"
 			reply_text = response
+			bot.send_message(
+				chat_id=update.effective_message.chat_id,
+				text=reply_text,
+			)
+			
 	# print(response)
-	bot.send_message(
-		chat_id=update.effective_message.chat_id,
-		text=reply_text,
 		
 	if '/cat' in text:
 		url = 'https://random.cat/view/'
