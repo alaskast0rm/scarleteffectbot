@@ -105,7 +105,7 @@ def message_handler(bot: Bot, update: Update):
 					return '\n'.join(str(mod_divka_https) for i in range(1))
 
 				
-				response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https)}\n"
+				response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https).split('?')[0]}\n"
 			reply_text = response
 			
 			bot.send_message(
@@ -121,8 +121,6 @@ def message_handler(bot: Bot, update: Update):
 			chat_id=update.effective_message.chat_id,
 			photo=reply_text,
 		)
-
-	
 	
 	if '/bc' in text:
 		photo_url = "https://www.tradingview.com/x/2D4tS4y6"
@@ -132,8 +130,6 @@ def message_handler(bot: Bot, update: Update):
 		)
 
 	
-
-
 def main():
 	print('Start')
 	scarlet_bot = Bot(
