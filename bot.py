@@ -31,7 +31,6 @@ def message_handler(bot: Bot, update: Update):
 		if request.status_code == 200:
 			soup = bs(request.content, 'html.parser')
 			divs = soup.find_all('div', attrs={'class': 'layout-columns-wrapper'})
-			print('ok')
 
 			for div in divs:
 				divka = div.find('div', attrs={'class': "currency-table__large-text"}).text
@@ -127,29 +126,31 @@ def message_handler(bot: Bot, update: Update):
 		request = session.get(url, headers=headers)
 
 		if request.status_code == 200:
-			soup = bs(request.content, 'html.parser')
-			divs = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
 
-			def temperature_now(divs):
-				for div in divs:
+			soup = bs(request.content, 'html.parser')
+			divs_now = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
+
+			def temperature_now(divs_now):
+				for div in divs_now:
 					output_now = div.find('span', attrs={'class': 'temp__value'}).text
 					return "Температура чичас: " + output_now + ' C°'
 
-			divs = soup.find_all('div', attrs={'class': 'link__feelings fact__feelings'})
+			divs_feels = soup.find_all('div', attrs={'class': 'link__feelings fact__feelings'})
 
-			def temperature_feels(divs):
-				for div in divs:
+			def temperature_feels(divs_feels):
+				for div in divs_feels:
 					output_feels = div.find('span', attrs={'class': 'temp__value'}).text
 					return "Ощущается как: " + output_feels + ' C°'
 
-			response = str(temperature_now(divs)) + '\n' + str(temperature_feels(divs))
+			response = str(temperature_now(divs_now)) + '\n' + str(temperature_feels(divs_feels))
 			reply_text = response
 
 			bot.send_message(
 				chat_id=update.effective_message.chat_id,
 				text=reply_text,
 			)
-			
+
+
 
 def main():
 	print('Start')
