@@ -127,19 +127,19 @@ def message_handler(bot: Bot, update: Update):
 
 		if request.status_code == 200:
 			soup = bs(request.content, 'html.parser')
-			divs_time_now = soup.find_all('div', attrs={'class': 'fact__time-yesterday-wrap'})
+# 			divs_time_now = soup.find_all('div', attrs={'class': 'fact__time-yesterday-wrap'})
 
-			def time_now(divs_time_now):
-				for div in divs_time_now:
-					output_time_now = div.find('time', attrs={'class': 'time fact__time'}).text
-					return output_time_now + '\n'
+# 			def time_now(divs_time_now):
+# 				for div in divs_time_now:
+# 					output_time_now = div.find('time', attrs={'class': 'time fact__time'}).text
+# 					return output_time_now + '\n'
 
 			divs_now = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
 
 			def temperature_now(divs_now):
 				for div in divs_now:
 					output_now = div.find('span', attrs={'class': 'temp__value'}).text
-					return "Температура сейчас: " + output_now + '°\n'
+					return "t: " + output_now + '°\n'
 
 			divs_feels = soup.find_all('div', attrs={'class': 'link__feelings fact__feelings'})
 
