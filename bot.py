@@ -126,23 +126,38 @@ def message_handler(bot: Bot, update: Update):
 		request = session.get(url, headers=headers)
 
 		if request.status_code == 200:
-
 			soup = bs(request.content, 'html.parser')
+			divs_time_now = soup.find_all('div', attrs={'class': 'fact__time-yesterday-wrap'})
+
+			def time_now(divs_time_now):
+				for div in divs_time_now:
+					output_time_now = div.find('time', attrs={'class': 'time fact__time'}).text
+					return output_time_now + '\n'
+
 			divs_now = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
 
 			def temperature_now(divs_now):
 				for div in divs_now:
 					output_now = div.find('span', attrs={'class': 'temp__value'}).text
-					return "Температура чичас: " + output_now + ' C°'
+					return "Температура сейчас: " + output_now + '°\n'
 
 			divs_feels = soup.find_all('div', attrs={'class': 'link__feelings fact__feelings'})
 
 			def temperature_feels(divs_feels):
 				for div in divs_feels:
 					output_feels = div.find('span', attrs={'class': 'temp__value'}).text
-					return "Ощущается как: " + output_feels + ' C°'
+					return "Ощущается как: " + output_feels + '°\n'
 
-			response = str(temperature_now(divs_now)) + '\n' + str(temperature_feels(divs_feels))
+			divs_yesterday_temperature = soup.find_all('dl', attrs={
+				'class': 'term term_orient_h term_size_wide fact__yesterday'})
+
+			def yesterday_temperature(divs_yesterday_temperature):
+				for div in divs_yesterday_temperature:
+					output_yesterday_temperature = div.find('span', attrs={'class': 'temp__value'}).text
+					return 'Вчера в это время: ' + output_yesterday_temperature + '°\n'
+
+			response = str(time_now(divs_time_now)) + str(temperature_now(divs_now)) + str(
+				temperature_feels(divs_feels)) + str(yesterday_temperature(divs_yesterday_temperature))
 			reply_text = response
 
 			bot.send_message(
@@ -153,7 +168,6 @@ def message_handler(bot: Bot, update: Update):
 
 
 def main():
-	print('Start')
 	scarlet_bot = Bot(
 		token=TG_TOKEN,
 		base_url='https://telegg.ru/orig/bot',
