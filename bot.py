@@ -139,7 +139,7 @@ def message_handler(bot: Bot, update: Update):
 			def temperature_now(divs_now):
 				for div in divs_now:
 					output_now = div.find('span', attrs={'class': 'temp__value'}).text
-					return "t: " + output_now + '°\n'
+					return "Температура: " + output_now + '°\n'
 
 			divs_feels = soup.find_all('div', attrs={'class': 'link__feelings fact__feelings'})
 
