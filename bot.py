@@ -156,7 +156,7 @@ def message_handler(bot: Bot, update: Update):
 					output_yesterday_temperature = div.find('span', attrs={'class': 'temp__value'}).text
 					return 'Вчера в это время: ' + output_yesterday_temperature + '°\n'
 
-			response = str(time_now(divs_time_now)) + str(temperature_now(divs_now)) + str(
+			response = str(temperature_now(divs_now)) + str(
 				temperature_feels(divs_feels)) + str(yesterday_temperature(divs_yesterday_temperature))
 			reply_text = response
 
