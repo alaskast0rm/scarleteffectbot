@@ -131,7 +131,7 @@ def message_handler(bot: Bot, update: Update):
 			print('KK')
 			day = str(text[3:-3])
 			month = str(text.split('.')[-1])
-			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{day}-{month}"
+			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{month}-{day}"
 			date = f'{day}.{month}.{now_year}'
 		else:
 			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{now_month}-{now_day}"
@@ -169,7 +169,7 @@ def message_handler(bot: Bot, update: Update):
 				date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
 				vivod += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
 						 '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
-						 + '\n🏢 ' + output_table_aud + '\n' + output_table_kind + '\n\n\n'
+						 + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
 
 			reply_text = date_and_day_of_the_week + vivod
 			if len(vivod) == 0:
