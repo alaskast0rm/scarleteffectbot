@@ -132,7 +132,7 @@ def message_handler(bot: Bot, update: Update):
 			day = str(text[3:-3])
 			month = str(text.split('.')[-1])
 			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{month}-{day}"
-			date = f'{month}.{day}.{now_year}'
+			date = f'{day}.{month}.{now_year}'
 		else:
 			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{now_month}-{now_day}"
 			date = f'{now_day}.{now_month}.{now_year}'
