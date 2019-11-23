@@ -55,6 +55,7 @@ def message_handler(bot: Bot, update: Update):
 			divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
 			counter = 0
 			response = ''
+			
 			for div in divs:
 				counter += 1
 				divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
@@ -124,14 +125,17 @@ def message_handler(bot: Bot, update: Update):
 		now_year = year[2:]
 		now_month = now.month
 		now_day = now.day
+		
 
 		if len(text) > 2:
 			print('KK')
-			month = str(text[3:-3])
-			day = str(text.split('.')[-1])
-			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{month}-{day}"
+			day = str(text[3:-3])
+			month = str(text.split('.')[-1])
+			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{day}-{month}"
+			date = f'{day}.{month}.{now_year}'
 		else:
 			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{now_month}-{now_day}"
+			date = f'{now_day}.{now_month}.{now_year}'
 
 		session = requests.Session()
 		request = session.get(url, headers=head)
@@ -143,7 +147,7 @@ def message_handler(bot: Bot, update: Update):
 			counter = 1
 			date_and_day_of_the_week = ''
 			for table in tbody:
-				date = f'{now_day}.{now_month}.{now_year}'
+				
 				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
 
 				output_table_para = table.find('td', {
