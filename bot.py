@@ -6,6 +6,8 @@ from telegram.ext import Filters
 import requests
 from bs4 import BeautifulSoup as bs
 import random
+import telegram
+import datetime
 
 TG_TOKEN = '968188661:AAEF4JBqD5OzPDK9I2LfTeQp-Jlr_Zd37u4'
 head = {'accept': '*/*',
@@ -19,6 +21,7 @@ def message_handler(bot: Bot, update: Update):
 		name = user.first_name
 	else:
 		name = 'анонимыч'
+
 	text = update.effective_message.text
 	reply_text = f'Ну здарова {name}\n\n{text}'
 
@@ -107,14 +110,76 @@ def message_handler(bot: Bot, update: Update):
 		url = 'https://random.cat/view/'
 		number = random.randint(1, 1500)
 		reply_text = url + str(number)
+		print(text)
 		bot.send_photo(
 			chat_id=update.effective_message.chat_id,
 			photo=reply_text,
+
 		)
+
+	if '/r' in text:
+
+		now = datetime.datetime.now()
+		year = str(now.year)
+		now_year = year[2:]
+		now_month = now.month
+		now_day = now.day
+
+		if len(text) > 2:
+			print('KK')
+			month = str(text[3:-3])
+			day = str(text.split('.')[-1])
+			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{month}-{day}"
+		else:
+			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{now_month}-{now_day}"
+
+		session = requests.Session()
+		request = session.get(url, headers=head)
+
+		if request.status_code == 200:
+			soup = bs(request.content, 'html.parser')
+			tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
+			vivod = ''
+			counter = 1
+			date_and_day_of_the_week = ''
+			for table in tbody:
+				date = f'{now_day}.{now_month}.{now_year}'
+				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
+
+				output_table_para = table.find('td', {
+					'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
+
+				output_table_time = table.find('td', {
+					'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
+
+				output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
+
+				output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find('small').text
+
+				output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
+
+				output_table_kind = soup.find_all('i')[counter].text
+
+				counter += 2
+
+				date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
+				vivod += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
+						 '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
+						 + '\n🏢 ' + output_table_aud + '\n' + output_table_kind + '\n\n\n'
+
+			reply_text = date_and_day_of_the_week + vivod
+			if len(vivod) == 0:
+				reply_text = 'Пар нет, отдыхаем !'
+
+			bot.send_message(
+				chat_id=update.effective_message.chat_id,
+				text=reply_text,
+			)
 
 	if '/bc' in text:
 		photo_url = "https://www.tradingview.com/x/2D4tS4y6"
 		bot.send_photo(
+			timeout=10,
 			chat_id=update.effective_message.chat_id,
 			photo=photo_url,
 		)
@@ -127,12 +192,12 @@ def message_handler(bot: Bot, update: Update):
 
 		if request.status_code == 200:
 			soup = bs(request.content, 'html.parser')
-# 			divs_time_now = soup.find_all('div', attrs={'class': 'fact__time-yesterday-wrap'})
-
-# 			def time_now(divs_time_now):
-# 				for div in divs_time_now:
-# 					output_time_now = div.find('time', attrs={'class': 'time fact__time'}).text
-# 					return output_time_now + '\n'
+			# divs_time_now = soup.find_all('div', attrs={'class': 'fact__time-yesterday-wrap'})
+			#
+			# def time_now(divs_time_now):
+			# 	for div in divs_time_now:
+			# 		output_time_now = div.find('time', attrs={'class': 'time fact__time'}).text
+			# 		return output_time_now + '\n'
 
 			divs_now = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
 
@@ -166,8 +231,8 @@ def message_handler(bot: Bot, update: Update):
 			)
 
 
-
 def main():
+	print('Start')
 	scarlet_bot = Bot(
 		token=TG_TOKEN,
 		base_url='https://telegg.ru/orig/bot',
