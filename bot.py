@@ -136,57 +136,62 @@ def message_handler(bot: Bot, update: Update):
 			now_year = year[2:]
 			now_month = now.month
 			now_day = now.day
+			day = str(text[4:-3])
+			month = str(text.split('.')[-1])
 
 			if len(text) > 3:
-				day = str(text[4:-3])
-				month = str(text.split('.')[-1])
-				
-				if len(day) != 2 or len(month) != 2:
-					day = now_day
-					month = now_month
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 				date = f'{day}.{month}.{now_year}'
-				
+
 			else:
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
 
-			session = requests.Session()
-			request = session.get(url, headers=head)
+			if len(day) == 2 and len(month) == 2 or (len(str(now_day)) == 2 and len(str(now_month))) == 2:
+				session = requests.Session()
+				request = session.get(url, headers=head)
 
-			if request.status_code == 200:
-				soup = bs(request.content, 'html.parser')
-				tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
-				counter = 1
-				output = ''
-				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-				date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
+				if request.status_code == 200:
+					soup = bs(request.content, 'html.parser')
+					tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
+					counter = 1
+					output = ''
+					output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
+					date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
 
-				for table in tbody:
-					output_table_para = table.find('td', {
-						'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
+					for table in tbody:
+						output_table_para = table.find('td', {
+							'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
 
-					output_table_time = table.find('td', {
-						'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
+						output_table_time = table.find('td', {
+							'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
 
-					output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
+						output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
 
-					output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find('small').text
+						output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find('small').text
 
-					output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
+						output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
 
-					output_table_kind = soup.find_all('i')[counter].text
+						output_table_kind = soup.find_all('i')[counter].text
 
-					counter += 2
+						counter += 2
 
-					output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
-							  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
-							  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
+						output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
+								  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
+								  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
 
-				reply_text = date_and_day_of_the_week + output
+					reply_text = date_and_day_of_the_week + output
 
-				if len(output) == 0:
-					reply_text = date_and_day_of_the_week + '\n 😌 Пар нет, отдыхаем !'
+					if len(output) == 0:
+						reserve_responce = soup.find('table', {'class': 'shadow'}).find('strong').text
+						reply_text = date_and_day_of_the_week + reserve_responce
+						
+						if type(reserve_responce) == "NoneType":
+							reply_text = date_and_day_of_the_week + '\n 😌 Пар нет, отдыхаем !'
+							
+			else:
+				reply_text = "❌ Неправильный ввод !"
+
 		else:
 			reply_text = "❌ Неправильный ввод !"
 
