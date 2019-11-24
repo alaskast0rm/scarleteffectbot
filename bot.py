@@ -208,7 +208,7 @@ def message_handler(bot: Bot, update: Update):
 
 		bot.send_message(
 			chat_id=update.effective_message.chat_id,
-			text=reply_text + '\nВремя на сервере\' + now_time,
+			text=reply_text + '\nВремя на сервере: ' + now_time,
 		)
 
 	if '/bc' in text:
