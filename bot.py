@@ -55,7 +55,7 @@ def message_handler(bot: Bot, update: Update):
 			divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
 			counter = 0
 			response = ''
-			
+
 			for div in divs:
 				counter += 1
 				divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
@@ -119,22 +119,26 @@ def message_handler(bot: Bot, update: Update):
 		)
 
 	if '/r' in text:
+		if '/r1' in text:
+			number_1 = 3
+			number_2 = 1
+		else:
+			number_1 = 4
+			number_2 = 2
 
 		now = datetime.datetime.now()
 		year = str(now.year)
 		now_year = year[2:]
 		now_month = now.month
 		now_day = now.day
-		
 
-		if len(text) > 2:
-			print('KK')
-			day = str(text[3:-3])
+		if len(text) > 3:
+			day = str(text[4:-3])
 			month = str(text.split('.')[-1])
-			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{month}-{day}"
+			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 			date = f'{day}.{month}.{now_year}'
 		else:
-			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate=2019-{now_month}-{now_day}"
+			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 			date = f'{now_day}.{now_month}.{now_year}'
 
 		session = requests.Session()
@@ -143,13 +147,12 @@ def message_handler(bot: Bot, update: Update):
 		if request.status_code == 200:
 			soup = bs(request.content, 'html.parser')
 			tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
-			vivod = ''
 			counter = 1
-			date_and_day_of_the_week = ''
-			for table in tbody:
-				
-				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
+			output = ''
+			output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
+			date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
 
+			for table in tbody:
 				output_table_para = table.find('td', {
 					'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
 
@@ -166,14 +169,14 @@ def message_handler(bot: Bot, update: Update):
 
 				counter += 2
 
-				date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
-				vivod += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
-						 '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
-						 + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
+				output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
+						  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
+						  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
 
-			reply_text = date_and_day_of_the_week + vivod
-			if len(vivod) == 0:
-				reply_text = 'Пар нет, отдыхаем !'
+			reply_text = date_and_day_of_the_week + output
+
+			if len(output) == 0:
+				reply_text = date_and_day_of_the_week + '\n 😌 Пар нет, отдыхаем !'
 
 			bot.send_message(
 				chat_id=update.effective_message.chat_id,
@@ -223,10 +226,12 @@ def message_handler(bot: Bot, update: Update):
 			def yesterday_temperature(divs_yesterday_temperature):
 				for div in divs_yesterday_temperature:
 					output_yesterday_temperature = div.find('span', attrs={'class': 'temp__value'}).text
-					return 'Вчера в это время: ' + output_yesterday_temperature + '°\n'
+					return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
+
+			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
 
 			response = str(temperature_now(divs_now)) + str(
-				temperature_feels(divs_feels)) + str(yesterday_temperature(divs_yesterday_temperature))
+				temperature_feels(divs_feels)) + str(divs_condition) + str(yesterday_temperature(divs_yesterday_temperature))
 			reply_text = response
 
 			bot.send_message(
