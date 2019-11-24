@@ -143,7 +143,7 @@ def message_handler(bot: Bot, update: Update):
 				
 				if len(day) != 2 or len(month) != 2:
 					day = now_day
-					month = now_day
+					month = now_month
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 				date = f'{day}.{month}.{now_year}'
 				
