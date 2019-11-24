@@ -185,10 +185,8 @@ def message_handler(bot: Bot, update: Update):
 					if len(output) == 0:
 						reserve_responce = soup.find('table', {'class': 'shadow'}).find('strong').text
 						reply_text = date_and_day_of_the_week + reserve_responce
-						
-						if type(reserve_responce) == "NoneType":
+						if "Имеется новое расписание, занятия ещё не начались" in reserve_responce:
 							reply_text = date_and_day_of_the_week + '\n 😌 Пар нет, отдыхаем !'
-							
 			else:
 				reply_text = "❌ Неправильный ввод !"
 
