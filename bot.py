@@ -111,7 +111,6 @@ def message_handler(bot: Bot, update: Update):
 		url = 'https://random.cat/view/'
 		number = random.randint(1, 1500)
 		reply_text = url + str(number)
-		print(text)
 		bot.send_photo(
 			chat_id=update.effective_message.chat_id,
 			photo=reply_text,
@@ -126,7 +125,7 @@ def message_handler(bot: Bot, update: Update):
 			number_1 = 3
 			number_2 = 1
 
-		elif '/r2' in text:
+		if '/r2' in text:
 			number_1 = 4
 			number_2 = 2
 
@@ -134,21 +133,34 @@ def message_handler(bot: Bot, update: Update):
 			now = datetime.datetime.now()
 			year = str(now.year)
 			now_year = year[2:]
-			now_month = now.month
-			now_day = now.day
-			day = str(text[4:-3])
-			month = str(text.split('.')[-1])
+			now_month = str(now.month)
+			now_day = str(now.day)
+			now_time = str(now.time())
+			print(now_time)
 
 			if len(text) > 3:
+				day = str(text.split('.')[0].split(' ')[-1])
+				month = str(text.split('.')[-1])
+				print(day)
+				print(month)
+
+				if len(day) == 1:
+					zero_plus_day = '0' + day
+					day = zero_plus_day
+
+				if len(month) == 1:
+					zero_plus_month = '0' + month
+					month = zero_plus_month
+
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 				date = f'{day}.{month}.{now_year}'
 
-			if (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot"):
-				
+			if (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot") or (text == "/r2") or (text == "/r1"):
+
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
 
-			if (len(day) == 2 and len(month) == 2) or (len(str(now_day)) == 2 and len(str(now_month)) == 2) or (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot"):
+			if (text == "/r2") or (text == "/r1") or (len(day) == 2 and len(month) == 2) or (len(now_day) == 2) or (len(now_month) == 2) or (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot"):
 				session = requests.Session()
 				request = session.get(url, headers=head)
 
@@ -179,7 +191,7 @@ def message_handler(bot: Bot, update: Update):
 
 						output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
 								  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
-								  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
+								  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n'
 
 					reply_text = date_and_day_of_the_week + output
 
@@ -196,7 +208,7 @@ def message_handler(bot: Bot, update: Update):
 
 		bot.send_message(
 			chat_id=update.effective_message.chat_id,
-			text=reply_text,
+			text=reply_text + now_time,
 		)
 
 	if '/bc' in text:
