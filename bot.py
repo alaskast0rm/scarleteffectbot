@@ -119,69 +119,74 @@ def message_handler(bot: Bot, update: Update):
 		)
 
 	if '/r' in text:
+		number_1 = 0
+		number_2 = 0
 		if '/r1' in text:
 			number_1 = 3
 			number_2 = 1
-		else:
+		elif '/r2' in text:
 			number_1 = 4
 			number_2 = 2
 
-		now = datetime.datetime.now()
-		year = str(now.year)
-		now_year = year[2:]
-		now_month = now.month
-		now_day = now.day
+		if number_1 != 0 and number_2 != 0:
+			now = datetime.datetime.now()
+			year = str(now.year)
+			now_year = year[2:]
+			now_month = now.month
+			now_day = now.day
 
-		if len(text) > 3:
-			day = str(text[4:-3])
-			month = str(text.split('.')[-1])
-			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
-			date = f'{day}.{month}.{now_year}'
+			if len(text) > 3:
+				day = str(text[4:-3])
+				month = str(text.split('.')[-1])
+				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
+				date = f'{day}.{month}.{now_year}'
+			else:
+				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
+				date = f'{now_day}.{now_month}.{now_year}'
+
+			session = requests.Session()
+			request = session.get(url, headers=head)
+
+			if request.status_code == 200:
+				soup = bs(request.content, 'html.parser')
+				tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
+				counter = 1
+				output = ''
+				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
+				date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
+
+				for table in tbody:
+					output_table_para = table.find('td', {
+						'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
+
+					output_table_time = table.find('td', {
+						'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
+
+					output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
+
+					output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find('small').text
+
+					output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
+
+					output_table_kind = soup.find_all('i')[counter].text
+
+					counter += 2
+
+					output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
+							  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
+							  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
+
+				reply_text = date_and_day_of_the_week + output
+
+				if len(output) == 0:
+					reply_text = date_and_day_of_the_week + '\n 😌 Пар нет, отдыхаем !'
 		else:
-			url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
-			date = f'{now_day}.{now_month}.{now_year}'
-
-		session = requests.Session()
-		request = session.get(url, headers=head)
-
-		if request.status_code == 200:
-			soup = bs(request.content, 'html.parser')
-			tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
-			counter = 1
-			output = ''
-			output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-			date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
-
-			for table in tbody:
-				output_table_para = table.find('td', {
-					'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
-
-				output_table_time = table.find('td', {
-					'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
-
-				output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
-
-				output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find('small').text
-
-				output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
-
-				output_table_kind = soup.find_all('i')[counter].text
-
-				counter += 2
-
-				output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
-						  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
-						  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n\n'
-
-			reply_text = date_and_day_of_the_week + output
-
-			if len(output) == 0:
-				reply_text = date_and_day_of_the_week + '\n 😌 Пар нет, отдыхаем !'
-
-			bot.send_message(
-				chat_id=update.effective_message.chat_id,
-				text=reply_text,
-			)
+			reply_text = "❌ Неправильный ввод !"
+			
+		bot.send_message(
+			chat_id=update.effective_message.chat_id,
+			text=reply_text,
+		)
 
 	if '/bc' in text:
 		photo_url = "https://www.tradingview.com/x/2D4tS4y6"
@@ -225,7 +230,7 @@ def message_handler(bot: Bot, update: Update):
 
 			def yesterday_temperature(divs_yesterday_temperature):
 				for div in divs_yesterday_temperature:
-					output_yesterday_temperature = div.find('span', attrs={'class': 'temp__value'}).text
+					output_yesterday_temperature = div     .find('span', attrs={'class': 'temp__value'}).text
 					return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
 
 			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
