@@ -143,12 +143,12 @@ def message_handler(bot: Bot, update: Update):
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 				date = f'{day}.{month}.{now_year}'
 
-			elif text == "/r2@scarlet_effect_bot" or text == "/r1@scarlet_effect_bot":
+			if (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot"):
+				
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
-			
-			if (len(day) == 2 and len(month) == 2) or (len(str(now_day)) == 2 and len(str(now_month)) == 2) or \
-					text == "/r2@scarlet_effect_bot" or text == "/r1@scarlet_effect_bot":
+
+			if (len(day) == 2 and len(month) == 2) or (len(str(now_day)) == 2 and len(str(now_month)) == 2) or (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot"):
 				session = requests.Session()
 				request = session.get(url, headers=head)
 
