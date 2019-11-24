@@ -121,9 +121,11 @@ def message_handler(bot: Bot, update: Update):
 	if '/r' in text:
 		number_1 = 0
 		number_2 = 0
+
 		if '/r1' in text:
 			number_1 = 3
 			number_2 = 1
+
 		elif '/r2' in text:
 			number_1 = 4
 			number_2 = 2
@@ -138,8 +140,13 @@ def message_handler(bot: Bot, update: Update):
 			if len(text) > 3:
 				day = str(text[4:-3])
 				month = str(text.split('.')[-1])
+				
+				if len(day) != 2 or len(month) != 2:
+					day = now_day
+					month = now_day
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 				date = f'{day}.{month}.{now_year}'
+				
 			else:
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
@@ -182,7 +189,7 @@ def message_handler(bot: Bot, update: Update):
 					reply_text = date_and_day_of_the_week + '\n 😌 Пар нет, отдыхаем !'
 		else:
 			reply_text = "❌ Неправильный ввод !"
-			
+
 		bot.send_message(
 			chat_id=update.effective_message.chat_id,
 			text=reply_text,
