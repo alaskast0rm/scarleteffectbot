@@ -253,8 +253,11 @@ def message_handler(bot: Bot, update: Update):
 
 			def yesterday_temperature(divs_yesterday_temperature):
 				for div in divs_yesterday_temperature:
-					output_yesterday_temperature = div     .find('span', attrs={'class': 'temp__value'}).text
-					return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
+					output_yesterday_temperature = div.find('span', attrs={'class': 'temp__value'}).text
+					if type(output_yesterday_temperature) == 'NoneType':
+						continue
+					else:
+						return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
 
 			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
 
