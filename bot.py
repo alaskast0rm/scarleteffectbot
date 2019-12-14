@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup as bs
 import random
 import telegram
 import datetime
+import re
 
 TG_TOKEN = '968188661:AAEF4JBqD5OzPDK9I2LfTeQp-Jlr_Zd37u4'
 head = {'accept': '*/*',
@@ -139,17 +140,21 @@ def message_handler(bot: Bot, update: Update):
 			if len(text) > 3 and '@scarlet_effect_bot' not in text:
 				day = str(text.split(' ')[1].split('.')[0])
 				month = str(text.split(' ')[1].split('.')[1])
+				pattern = r"[a-zA_Z_]"
+				check_day = re.match(pattern, day)
+				check_month = re.match(pattern, month)
+				if not check_day and not check_month:
 
-				if len(day) == 1:
-					zero_plus_day = '0' + day
-					day = zero_plus_day
+					if len(day) == 1:
+						zero_plus_day = '0' + day
+						day = zero_plus_day
 
-				if len(month) == 1:
-					zero_plus_month = '0' + month
-					month = zero_plus_month
+					if len(month) == 1:
+						zero_plus_month = '0' + month
+						month = zero_plus_month
 
-				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
-				date = f'{day}.{month}.{now_year}'
+					url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
+					date = f'{day}.{month}.{now_year}'
 
 			if text == "/r2" or text == "/r1" or text == "/r2@scarlet_effect_bot" or text == "/r1@scarlet_effect_bot":
 
