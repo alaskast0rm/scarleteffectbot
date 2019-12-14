@@ -143,7 +143,7 @@ def message_handler(bot: Bot, update: Update):
 				pattern = r"[a-zA_Z_]"
 				check_day = re.match(pattern, day)
 				check_month = re.match(pattern, month)
-				if not check_day and not check_month:
+				if check_day and check_month:
 
 					if len(day) == 1:
 						zero_plus_day = '0' + day
