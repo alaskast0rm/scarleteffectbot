@@ -125,7 +125,7 @@ def message_handler(bot: Bot, update: Update):
 			number_1 = 3
 			number_2 = 1
 
-		if '/r2' in text:
+		elif '/r2' in text:
 			number_1 = 4
 			number_2 = 2
 
@@ -155,7 +155,7 @@ def message_handler(bot: Bot, update: Update):
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 				date = f'{day}.{month}.{now_year}'
 
-			if (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot") or (text == "/r2") or (text == "/r1"):
+			if (text == "/r2") or (text == "/r1"):
 
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
@@ -248,12 +248,10 @@ def message_handler(bot: Bot, update: Update):
 					output_feels = div.find('span', attrs={'class': 'temp__value'}).text
 					return "Ощущается как: " + output_feels + '°\n'
 
-
 			def yesterday_temperature():
-				output_yesterday_temperature = soup.find('div', attrs={
-			'class': 'term term_orient_h term_size_wide fact__yesterday'}).find('span', attrs={'class': 'temp__value'}).text
-				if len(output_yesterday_temperature) == 0:
-					output_yesterday_temperature = 'Хуй знает :)'
+				output_yesterday_temperature = soup.find('div', attrs={'class': 'term term_orient_h term_size_wide fact__yesterday'}).find('span', attrs={'class': 'temp__value'}).text
+				# if len(output_yesterday_temperature) == 0:
+				# 	output_yesterday_temperature = 'Хуй знает :)'
 				return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
 
 			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
