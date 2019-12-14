@@ -138,7 +138,7 @@ def message_handler(bot: Bot, update: Update):
 			now_time = str(now.time())
 			print(now_time)
 
-			if len(text) > 3:
+			if len(text) >= 3:
 				day = str(text.split(' ')[1].split('.')[0])
 				month = str(text.split(' ')[1].split('.')[1])
 				print(day)
