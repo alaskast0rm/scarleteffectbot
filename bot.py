@@ -249,9 +249,7 @@ def message_handler(bot: Bot, update: Update):
 					return "Ощущается как: " + output_feels + '°\n'
 
 			def yesterday_temperature():
-				output_yesterday_temperature = soup.find('div', attrs={'class': 'term term_orient_h term_size_wide fact__yesterday'}).find('span', attrs={'class': 'temp__value'}).text
-				# if len(output_yesterday_temperature) == 0:
-				# 	output_yesterday_temperature = 'Хуй знает :)'
+				output_yesterday_temperature = soup.find('div', attrs={'class': 'fact__time-yesterday-wrap'}).find('span', attrs={'class': 'temp__value'}).text
 				return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
 
 			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
