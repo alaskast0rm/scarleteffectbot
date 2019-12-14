@@ -155,12 +155,12 @@ def message_handler(bot: Bot, update: Update):
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 				date = f'{day}.{month}.{now_year}'
 
-			if (text == "/r2") or (text == "/r1"):
+			if (text == "/r2") or (text == "/r1") or (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot"):
 
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
 
-			if (text == "/r2") or (text == "/r1") or (len(day) == 2 and len(month) == 2) or (len(now_day) == 2) or (len(now_month) == 2) or (text == "/r2@scarlet_effect_bot") or (text == "/r1@scarlet_effect_bot"):
+			if (len(day) == 2 and len(month) == 2) or (len(now_day) == 2) or (len(now_month) == 2):
 				session = requests.Session()
 				request = session.get(url, headers=head)
 
