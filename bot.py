@@ -126,22 +126,19 @@ def message_handler(bot: Bot, update: Update):
 		now_month = str(now.month)
 		now_day = str(now.day)
 		now_time = str(now.time())
-		print(now_time)
 
 		if '/r1' in text:
 			number_1 = 3
 			number_2 = 1
 
-		elif '/r2' in text:
+		if '/r2' in text:
 			number_1 = 4
 			number_2 = 2
 
 		if number_1 != 0 and number_2 != 0:
-			if len(text) > 3:
+			if len(text) > 3 and '@scarlet_effect_bot' not in text:
 				day = str(text.split(' ')[1].split('.')[0])
 				month = str(text.split(' ')[1].split('.')[1])
-				print(day)
-				print(month)
 
 				if len(day) == 1:
 					zero_plus_day = '0' + day
@@ -159,7 +156,7 @@ def message_handler(bot: Bot, update: Update):
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
 
-			if (len(day) == 2 and len(month) == 2) or (len(now_day) == 2) or (len(now_month) == 2):
+			if (len(now_day) == 2) or (len(now_month) == 2) or (len(day) == 2 and len(month) == 2):
 				session = requests.Session()
 				request = session.get(url, headers=head)
 
@@ -199,6 +196,8 @@ def message_handler(bot: Bot, update: Update):
 						reply_text = date_and_day_of_the_week + reserve_responce
 						if "Имеется новое расписание, занятия ещё не начались" in reserve_responce:
 							reply_text = "❌ Неправильный ввод !"
+				else:
+					reply_text = "❌ Неправильный ввод !"
 			else:
 				reply_text = "❌ Неправильный ввод !"
 
