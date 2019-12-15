@@ -143,8 +143,8 @@ def message_handler(bot: Bot, update: Update):
 				pattern = r"[a-zA_Z_]"
 				check_day = re.findall(pattern, day)
 				check_month = re.findall(pattern, month)
-				if not check_day and not check_month:
 
+				if not check_day and not check_month:
 					if len(day) == 1:
 						zero_plus_day = '0' + day
 						day = zero_plus_day
@@ -155,6 +155,9 @@ def message_handler(bot: Bot, update: Update):
 
 					url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 					date = f'{day}.{month}.{now_year}'
+				else:
+					reply_text = "❌ Неправильный ввод !"
+					
 
 			if text == "/r2" or text == "/r1" or text == "/r2@scarlet_effect_bot" or text == "/r1@scarlet_effect_bot":
 
@@ -268,7 +271,6 @@ def message_handler(bot: Bot, update: Update):
 
 
 def main():
-	print('Start')
 	scarlet_bot = Bot(
 		token=TG_TOKEN,
 		base_url='https://telegg.ru/orig/bot',
@@ -281,7 +283,6 @@ def main():
 
 	updater.start_polling()
 	updater.idle()
-	print('Finish')
 
 
 if __name__ == '__main__':
