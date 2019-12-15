@@ -107,7 +107,7 @@ def message_handler(bot: Bot, update: Update):
 				chat_id=update.effective_message.chat_id,
 				text=reply_text,
 			)
-			
+
 	global global_msg
 
 	if '/cat' in text:
@@ -278,18 +278,18 @@ def message_handler(bot: Bot, update: Update):
 
 			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
 			if divs_condition == 'Дождь со снегом':
-				emoji = '🌧🌨'
+				emoji = ' 🌧🌨'
 			elif divs_condition == 'Небольшой дождь' or divs_condition == 'Дождь':
-				emoji = '🌧'
+				emoji = ' 🌧'
 			elif divs_condition == 'Пасмурно':
-				emoji = '☁️'
+				emoji = ' ☁️'
 
 			elif divs_condition == 'Снег' or divs_condition == 'Небольшой снег':
-				emoji = '🌨'
+				emoji = ' 🌨'
 			elif divs_condition == 'Облачно':
-				emoji = '⛅️'
+				emoji = ' ⛅️'
 			elif divs_condition == 'Солнечно' or divs_condition == 'Ясно':
-				emoji = '☀️'
+				emoji = ' ☀️'
 			else:
 				emoji = ''
 
