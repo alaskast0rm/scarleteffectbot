@@ -156,8 +156,10 @@ def message_handler(bot: Bot, update: Update):
 					url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
 					date = f'{day}.{month}.{now_year}'
 				else:
-					reply_text = "❌ Неправильный ввод !"
-					
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text='❌ Неправильный ввод !' + '\nВремя на сервере: ' + now_time,
+					)
 
 			if text == "/r2" or text == "/r1" or text == "/r2@scarlet_effect_bot" or text == "/r1@scarlet_effect_bot":
 
