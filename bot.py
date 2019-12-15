@@ -107,15 +107,24 @@ def message_handler(bot: Bot, update: Update):
 				chat_id=update.effective_message.chat_id,
 				text=reply_text,
 			)
+			
+	global global_msg
 
 	if '/cat' in text:
 		url = 'https://random.cat/view/'
 		number = random.randint(1, 1500)
 		reply_text = url + str(number)
-		bot.send_photo(
+		msg = bot.send_photo(
 			chat_id=update.effective_message.chat_id,
 			photo=reply_text,
 
+		)
+		global_msg = msg
+
+	if '/delete' in text:
+		bot.delete_message(
+			chat_id=global_msg.chat_id,
+			message_id=global_msg.message_id,
 		)
 
 	if '/r' in text:
@@ -214,9 +223,16 @@ def message_handler(bot: Bot, update: Update):
 		else:
 			reply_text = "❌ Неправильный ввод !"
 
-		bot.send_message(
+		msg = bot.send_message(
 			chat_id=update.effective_message.chat_id,
 			text=reply_text + '\nВремя на сервере: ' + now_time,
+			reply_to_message_id=update.effective_message.message_id,
+
+		)
+
+		bot.pin_chat_message(
+			chat_id=msg.chat_id,
+			message_id=msg.message_id,
 		)
 
 	if '/bc' in text:
@@ -228,7 +244,7 @@ def message_handler(bot: Bot, update: Update):
 		)
 
 	if '/weather' in text:
-		url = "https://yandex.ru/pogoda/moscow"
+		url = "https://yandex.ru/pogoda/moscow?lat=55.85489273&lon=37.47623444&name=%D0%BC%D0%B5%D1%82%D1%80%D0%BE%20%D0%A0%D0%B5%D1%87%D0%BD%D0%BE%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB%2C%20%D0%97%D0%B0%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%BE%D1%80%D0%B5%D1%86%D0%BA%D0%B0%D1%8F%20%D0%BB%D0%B8%D0%BD%D0%B8%D1%8F%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0&kind=metro"
 		headers = head
 		session = requests.Session()
 		request = session.get(url, headers=headers)
@@ -261,9 +277,24 @@ def message_handler(bot: Bot, update: Update):
 				return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
 
 			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
+			if divs_condition == 'Дождь со снегом':
+				emoji = '🌧🌨'
+			elif divs_condition == 'Небольшой дождь' or divs_condition == 'Дождь':
+				emoji = '🌧'
+			elif divs_condition == 'Пасмурно':
+				emoji = '☁️'
+
+			elif divs_condition == 'Снег' or divs_condition == 'Небольшой снег':
+				emoji = '🌨'
+			elif divs_condition == 'Облачно':
+				emoji = '⛅️'
+			elif divs_condition == 'Солнечно' or divs_condition == 'Ясно':
+				emoji = '☀️'
+			else:
+				emoji = ''
 
 			response = str(temperature_now(divs_now)) + str(
-				temperature_feels(divs_feels)) + str(divs_condition) + str(yesterday_temperature())
+				temperature_feels(divs_feels)) + str(divs_condition) + emoji + str(yesterday_temperature())
 			reply_text = response
 
 			bot.send_message(
