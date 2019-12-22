@@ -127,6 +127,314 @@ def message_handler(bot: Bot, update: Update):
 			message_id=global_msg.message_id,
 		)
 
+	if '/seven' in text:
+		url = "https://studga.wohlnet.ru/d/full?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1"
+		headers = head
+		session = requests.Session()
+		request = session.get(url, headers=headers)
+		counter = 7
+		pattern_day = r'\s[0-3][0-9].'
+		pattern_month = r'.[0-1][0-9]'
+		check_day = re.findall(pattern_day, text)
+		check_month = re.findall(pattern_month, text)
+
+		if check_day and check_month:
+			if len(text) == 12:
+				try:
+					day = int(str(check_day).split("'")[1].split('.')[0])
+					month = int(str(check_month).split('.')[-1].split("'")[0])
+					print(day)
+					print(month)
+					year = 2019
+				except:
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+					)
+
+				if day > 31 or month > 12 or day == 0 or month == 0:
+
+					text = " ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+			else:
+				text = " ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+				bot.send_message(
+					chat_id=update.effective_message.chat_id,
+					text=text
+				)
+		elif text == '/seven@scarlet_effect_bot' or text == '/seven':
+
+				if request.status_code == 200:
+					soup = bs(request.content, 'html.parser')
+					try:
+						body_today = soup.find('tr', attrs={'style': "height: 60px;", 'class': "tr_today"})
+						print('try')
+
+						date = body_today.find('a')['href']
+					except AttributeError:
+						body_tomorrow = soup.find('tr', attrs={'style': "height: 60px;", 'class': "tr_tomorrow"})
+						date = body_tomorrow.find('a')['href']
+					new_date = date.split('=')[-1]
+					day = new_date[8:]
+					month = int(new_date[5:7])
+					year = int(new_date[:4])
+					if day[0] == 0:
+						day = int(day[1])
+					else:
+						day = int(day)
+		else:
+			bot.send_message(
+				chat_id=update.effective_message.chat_id,
+				text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+			)
+
+
+		def receiving_data(year, month, day):
+			print(month, day)
+			if len(str(day)) == 1:
+				day = '0' + str(day)
+
+			if len(str(month)) == 1:
+				month = '0' + str(month)
+
+			url = f'https://studga.wohlnet.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1&ofdate={year}-{month}-{day}'
+			session = requests.Session()
+			request = session.get(url, headers=head)
+
+			if request.status_code == 200:
+				soup = bs(request.content, 'html.parser')
+				tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
+				counter = 1
+				output = ''
+				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
+				date_and_day_of_the_week = '📅 ' + str(year) + '-' + str(day) + '-' + str(
+					month) + ' - ' + output_table_day_of_the_week + '\n'
+
+				for table in tbody:
+					output_table_para = table.find('td', {
+						'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
+
+					output_table_time = table.find('td', {
+						'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
+
+					output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
+
+					output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find(
+						'small').text
+
+					output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
+
+					output_table_kind = soup.find_all('i')[counter].text
+
+					counter += 2
+
+					output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
+							  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
+							  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n'
+				if len(output) == 0:
+					output = 'Пар нет, отдыхаем '
+
+				reply_text = date_and_day_of_the_week + output
+				return reply_text
+		if day > 31 or month > 12:
+			bot.send_message(
+				chat_id=update.effective_message.chat_id,
+				text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" +"		/seven 02.12"
+			)
+		else:
+
+			if month == 12:
+				for i in range(counter):
+					if day > 31:
+						month = 1
+						day = 1
+						year += 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 11:
+				for i in range(counter):
+					if day > 30:
+						month = 12
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 10:
+				for i in range(counter):
+					if day > 31:
+						month = 11
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 9:
+				for i in range(counter):
+					counter -= 1
+					if day > 30:
+						month = 10
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 8:
+				for i in range(counter):
+					if day > 31:
+						month = 9
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 7:
+				for i in range(counter):
+					if day > 31:
+						month = 8
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 6:
+				for i in range(counter):
+					if day > 30:
+						month = 7
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 5:
+				for i in range(counter):
+					if day > 31:
+						month = 6
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 4:
+				for i in range(counter):
+					if day > 30:
+						month = 5
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 3:
+				for i in range(counter):
+					if day > 31:
+						month = 4
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 2:
+				for i in range(counter):
+					if day > 29:
+						month = 3
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
+			if month == 1:
+				for i in range(counter):
+					if day > 31:
+						month = 2
+						day = 1
+						continue
+					else:
+						reply_text = receiving_data(year, month, day)
+						print(reply_text)
+						day += 1
+						counter -= 1
+					bot.send_message(
+						chat_id=update.effective_message.chat_id,
+						text=reply_text + "\n"
+					)
+
 	if '/r' in text:
 		number_1 = 0
 		number_2 = 0
@@ -251,13 +559,6 @@ def message_handler(bot: Bot, update: Update):
 
 		if request.status_code == 200:
 			soup = bs(request.content, 'html.parser')
-			# divs_time_now = soup.find_all('div', attrs={'class': 'fact__time-yesterday-wrap'})
-			#
-			# def time_now(divs_time_now):
-			# 	for div in divs_time_now:
-			# 		output_time_now = div.find('time', attrs={'class': 'time fact__time'}).text
-			# 		return output_time_now + '\n'
-
 			divs_now = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
 
 			def temperature_now(divs_now):
@@ -283,13 +584,14 @@ def message_handler(bot: Bot, update: Update):
 				emoji = ' 🌧'
 			elif divs_condition == 'Пасмурно':
 				emoji = ' ☁️'
-
 			elif divs_condition == 'Снег' or divs_condition == 'Небольшой снег':
 				emoji = ' 🌨'
 			elif divs_condition == 'Облачно':
 				emoji = ' ⛅️'
 			elif divs_condition == 'Солнечно' or divs_condition == 'Ясно':
 				emoji = ' ☀️'
+			elif divs_condition == 'Облачно с прояснениями':
+				emoji = ' 🌥'
 			else:
 				emoji = ''
 
