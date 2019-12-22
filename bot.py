@@ -206,8 +206,8 @@ def message_handler(bot: Bot, update: Update):
 				counter = 1
 				output = ''
 				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-				date_and_day_of_the_week = '📅 ' + str(year) + '-' + str(day) + '-' + str(
-					month) + ' - ' + output_table_day_of_the_week + '\n'
+				date_and_day_of_the_week = '📅 ' + str(day) + '-' + str(month) + '-' + str(
+					year)[2:] + ' - ' + output_table_day_of_the_week + '\n'
 
 				for table in tbody:
 					output_table_para = table.find('td', {
