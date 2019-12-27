@@ -285,7 +285,6 @@ def message_handler(bot: Bot, update: Update):
 
 			if month == 9:
 				for i in range(counter):
-					counter -= 1
 					if day > 30:
 						month = 10
 						day = 1
@@ -293,6 +292,7 @@ def message_handler(bot: Bot, update: Update):
 					else:
 						reply_text = receiving_data(year, month, day)
 						day += 1
+						counter -= 1
 					bot.send_message(
 						chat_id=update.effective_message.chat_id,
 						text=reply_text + "\n"
@@ -568,6 +568,7 @@ def message_handler(bot: Bot, update: Update):
 				return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
 
 			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
+			
 			if divs_condition == 'Дождь со снегом':
 				emoji = ' 🌧🌨'
 			elif divs_condition == 'Небольшой дождь' or divs_condition == 'Дождь':
