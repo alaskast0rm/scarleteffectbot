@@ -143,8 +143,6 @@ def message_handler(bot: Bot, update: Update):
 				try:
 					day = int(str(check_day).split("'")[1].split('.')[0])
 					month = int(str(check_month).split('.')[-1].split("'")[0])
-					print(day)
-					print(month)
 					year = 2019
 				except:
 					bot.send_message(
@@ -167,8 +165,6 @@ def message_handler(bot: Bot, update: Update):
 					soup = bs(request.content, 'html.parser')
 					try:
 						body_today = soup.find('tr', attrs={'style': "height: 60px;", 'class': "tr_today"})
-						print('try')
-
 						date = body_today.find('a')['href']
 					except AttributeError:
 						body_tomorrow = soup.find('tr', attrs={'style': "height: 60px;", 'class': "tr_tomorrow"})
@@ -189,7 +185,6 @@ def message_handler(bot: Bot, update: Update):
 
 
 		def receiving_data(year, month, day):
-			print(month, day)
 			if len(str(day)) == 1:
 				day = '0' + str(day)
 
@@ -206,8 +201,8 @@ def message_handler(bot: Bot, update: Update):
 				counter = 1
 				output = ''
 				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-				date_and_day_of_the_week = '📅 ' + str(day) + '-' + str(month) + '-' + str(
-					year)[2:] + ' - ' + output_table_day_of_the_week + '\n'
+				date_and_day_of_the_week = '📅 ' + str(year) + '-' + str(day) + '-' + str(
+					month) + ' - ' + output_table_day_of_the_week + '\n'
 
 				for table in tbody:
 					output_table_para = table.find('td', {
@@ -251,7 +246,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -267,7 +261,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -283,7 +276,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -300,7 +292,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 					bot.send_message(
 						chat_id=update.effective_message.chat_id,
@@ -315,7 +306,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -331,7 +321,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -347,7 +336,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -363,7 +351,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -379,7 +366,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -395,7 +381,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -411,7 +396,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -427,7 +411,6 @@ def message_handler(bot: Bot, update: Update):
 						continue
 					else:
 						reply_text = receiving_data(year, month, day)
-						print(reply_text)
 						day += 1
 						counter -= 1
 					bot.send_message(
@@ -552,8 +535,15 @@ def message_handler(bot: Bot, update: Update):
 		)
 
 	if '/weather' in text:
-		url = "https://yandex.ru/pogoda/moscow?lat=55.85489273&lon=37.47623444&name=%D0%BC%D0%B5%D1%82%D1%80%D0%BE%20%D0%A0%D0%B5%D1%87%D0%BD%D0%BE%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB%2C%20%D0%97%D0%B0%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%BE%D1%80%D0%B5%D1%86%D0%BA%D0%B0%D1%8F%20%D0%BB%D0%B8%D0%BD%D0%B8%D1%8F%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0&kind=metro"
 		headers = head
+		url_time = "https://voshod-solnca.ru/time/%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%B0"
+		session_time = requests.Session()
+		request_time = session_time.get(url_time, headers=headers)
+		soup_time = bs(request_time.content, 'html.parser')
+		body_time = soup_time.find('span', attrs={'id': "exact-time0"}).text
+		moscow_time = 'Время: ' + body_time
+
+		url = "https://yandex.ru/pogoda/moscow?lat=55.85489273&lon=37.47623444&name=%D0%BC%D0%B5%D1%82%D1%80%D0%BE%20%D0%A0%D0%B5%D1%87%D0%BD%D0%BE%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB%2C%20%D0%97%D0%B0%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%BE%D1%80%D0%B5%D1%86%D0%BA%D0%B0%D1%8F%20%D0%BB%D0%B8%D0%BD%D0%B8%D1%8F%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0&kind=metro"
 		session = requests.Session()
 		request = session.get(url, headers=headers)
 
@@ -596,7 +586,7 @@ def message_handler(bot: Bot, update: Update):
 				emoji = ''
 
 			response = str(temperature_now(divs_now)) + str(
-				temperature_feels(divs_feels)) + str(divs_condition) + emoji + str(yesterday_temperature())
+				temperature_feels(divs_feels)) + str(divs_condition) + emoji + str(yesterday_temperature()) + str(moscow_time)
 			reply_text = response
 
 			bot.send_message(
