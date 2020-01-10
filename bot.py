@@ -201,7 +201,7 @@ def message_handler(bot: Bot, update: Update):
 				counter = 1
 				output = ''
 				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-				date_and_day_of_the_week = '📅 ' + str(year) + '-' + str(day) + '-' + str(
+				date_and_day_of_the_week = '📅 ' + str(year) + '.' + str(day) + '.' + str(
 					month) + ' - ' + output_table_day_of_the_week + '\n'
 
 				for table in tbody:
@@ -453,7 +453,7 @@ def message_handler(bot: Bot, update: Update):
 						zero_plus_month = '0' + month
 						month = zero_plus_month
 
-					url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2019-{month}-{day}"
+					url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2020-{month}-{day}"
 					date = f'{day}.{month}.{now_year}'
 				else:
 					bot.send_message(
