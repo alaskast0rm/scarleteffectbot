@@ -143,7 +143,7 @@ def message_handler(bot: Bot, update: Update):
 				try:
 					day = int(str(check_day).split("'")[1].split('.')[0])
 					month = int(str(check_month).split('.')[-1].split("'")[0])
-					year = 2019
+					year = 2020
 				except:
 					bot.send_message(
 						chat_id=update.effective_message.chat_id,
@@ -201,8 +201,8 @@ def message_handler(bot: Bot, update: Update):
 				counter = 1
 				output = ''
 				output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-				date_and_day_of_the_week = '📅 ' + str(year) + '.' + str(day) + '.' + str(
-					month) + ' - ' + output_table_day_of_the_week + '\n'
+				date_and_day_of_the_week = '📅 ' + str(day) + '.' + str(month) + '.' + str(
+					year) + ' - ' + output_table_day_of_the_week + '\n'
 
 				for table in tbody:
 					output_table_para = table.find('td', {
