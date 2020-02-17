@@ -447,13 +447,13 @@ def message_handler(bot: Bot, update: Update):
 					if len(day) == 1:
 						zero_plus_day = '0' + day
 						day = zero_plus_day
-
 					if len(month) == 1:
 						zero_plus_month = '0' + month
 						month = zero_plus_month
 
 					url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2020-{month}-{day}"
 					date = f'{day}.{month}.{now_year}'
+
 				else:
 					bot.send_message(
 						chat_id=update.effective_message.chat_id,
@@ -461,9 +461,18 @@ def message_handler(bot: Bot, update: Update):
 					)
 
 			if text == "/r2" or text == "/r1" or text == "/r2@scarlet_effect_bot" or text == "/r1@scarlet_effect_bot":
-
 				url = f"http://sd.studga.ru/d/oneday?fac=3&flow=188&grp=2&lsubgrp={number_1}&esubgrp={number_2}&ofdate=2020-{now_month}-{now_day}"
 				date = f'{now_day}.{now_month}.{now_year}'
+
+				if len(now_day) == 1:
+					now_day_with_zero = '0' + now_day
+					now_day = now_day_with_zero
+					date = f'{now_day}.{now_month}.{now_year}'
+
+				if len(now_month) == 1:
+					now_month_with_zero = '0' + now_month
+					now_month = now_month_with_zero
+					date = f'{now_day}.{now_month}.{now_year}'
 
 			if (len(now_day) == 2) or (len(now_month) == 2) or (len(day) == 2 and len(month) == 2):
 				session = requests.Session()
@@ -475,14 +484,7 @@ def message_handler(bot: Bot, update: Update):
 					counter = 1
 					output = ''
 					output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-
-					if len(now_day) == 1:
-						now_day += '0' + now_day
-					if len(now_month) == 1:
-						now_month += '0' + now_month
-
-					clone_date = f'{now_day}.{now_month}.{now_year}'
-					date_and_day_of_the_week = '📅 ' + clone_date + ' - ' + output_table_day_of_the_week + '\n'
+					date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
 
 					for table in tbody:
 						output_table_para = table.find('td', {
@@ -513,7 +515,7 @@ def message_handler(bot: Bot, update: Update):
 						if "Имеется новое расписание, занятия ещё не начались" in reserve_responce:
 							reply_text = "❌ Неправильный ввод !"
 				else:
-					reply_text = "❌ Неправильный ввод !"
+					reply_text = "A error connection"
 			else:
 				reply_text = "❌ Неправильный ввод !"
 
