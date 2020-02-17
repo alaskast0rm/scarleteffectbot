@@ -160,7 +160,6 @@ def message_handler(bot: Bot, update: Update):
 					text=text
 				)
 		elif text == '/seven@scarlet_effect_bot' or text == '/seven':
-
 				if request.status_code == 200:
 					soup = bs(request.content, 'html.parser')
 					try:
@@ -476,7 +475,14 @@ def message_handler(bot: Bot, update: Update):
 					counter = 1
 					output = ''
 					output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-					date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
+
+					if len(now_day) == 1:
+						now_day += '0' + now_day
+					if len(now_month) == 1:
+						now_month += '0' + now_month
+
+					clone_date = date
+					date_and_day_of_the_week = '📅 ' + clone_date + ' - ' + output_table_day_of_the_week + '\n'
 
 					for table in tbody:
 						output_table_para = table.find('td', {
