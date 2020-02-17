@@ -29,7 +29,6 @@ def message_handler(bot: Bot, update: Update):
 	if '/dol' in text:
 		headers = head
 		url = 'https://www.banki.ru/products/currency/usd/'
-
 		sesion = requests.Session()
 		request = sesion.get(url, headers=headers)
 		if request.status_code == 200:
@@ -522,12 +521,17 @@ def message_handler(bot: Bot, update: Update):
 		else:
 			reply_text = "❌ Неправильный ввод !"
 
-		msg = bot.send_message(
-			chat_id=update.effective_message.chat_id,
-			text=reply_text + '\nВремя на сервере: ' + now_time,
-			reply_to_message_id=update.effective_message.message_id,
-
-		)
+		if reply_text == "❌ Неправильный ввод !" or reply_text == "A error connection":
+			msg = bot.send_message(
+				chat_id=update.effective_message.chat_id,
+				text=reply_text + '\nВремя на сервере: ' + now_time,
+			)
+		else:
+			msg = bot.send_message(
+				chat_id=update.effective_message.chat_id,
+				text=reply_text + '\nВремя на сервере: ' + now_time,
+				reply_to_message_id=update.effective_message.message_id,
+			)
 
 		bot.pin_chat_message(
 			chat_id=msg.chat_id,
