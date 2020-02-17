@@ -481,7 +481,7 @@ def message_handler(bot: Bot, update: Update):
 					if len(now_month) == 1:
 						now_month += '0' + now_month
 
-					clone_date = date
+					clone_date = f'{now_day}.{now_month}.{now_year}'
 					date_and_day_of_the_week = '📅 ' + clone_date + ' - ' + output_table_day_of_the_week + '\n'
 
 					for table in tbody:
