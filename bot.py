@@ -522,9 +522,10 @@ def message_handler(bot: Bot, update: Update):
 			reply_text = "❌ Неправильный ввод !"
 
 		if reply_text == "❌ Неправильный ввод !" or reply_text == "A error connection":
-			msg = bot.send_message(
+			bot.send_message(
 				chat_id=update.effective_message.chat_id,
 				text=reply_text + '\nВремя на сервере: ' + now_time,
+				reply_to_message_id=update.effective_message.message_id,
 			)
 		else:
 			msg = bot.send_message(
@@ -532,11 +533,10 @@ def message_handler(bot: Bot, update: Update):
 				text=reply_text + '\nВремя на сервере: ' + now_time,
 				reply_to_message_id=update.effective_message.message_id,
 			)
-
-		bot.pin_chat_message(
-			chat_id=msg.chat_id,
-			message_id=msg.message_id,
-		)
+			bot.pin_chat_message(
+				chat_id=msg.chat_id,
+				message_id=msg.message_id,
+			)
 
 	if '/bc' in text:
 		photo_url = "https://www.tradingview.com/x/2D4tS4y6"
