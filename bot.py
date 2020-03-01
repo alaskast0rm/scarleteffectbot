@@ -6,7 +6,6 @@ from telegram.ext import Filters
 import requests
 from bs4 import BeautifulSoup as bs
 import random
-import telegram
 import datetime
 import re
 

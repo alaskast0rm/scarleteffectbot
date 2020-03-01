@@ -1,3 +1,4 @@
+aes==1.0.0
 asn1crypto==1.2.0
 beautifulsoup4==4.8.1
 bs4==0.0.1
@@ -5,7 +6,9 @@ certifi==2019.9.11
 cffi==1.13.0
 chardet==3.0.4
 chromedriver==2.24.1
+cipher==0.1
 Click==7.0
+crypto==1.4.1
 cryptography==2.7
 Cython==0.29.13
 Django==2.2.5
@@ -20,10 +23,12 @@ keyboard==0.13.4
 MarkupSafe==1.1.1
 MouseInfo==0.1.2
 mss==4.0.3
+Naked==0.1.31
 Pillow==6.1.0
 Pillow-PIL==0.1.dev0
 PyAutoGUI==0.9.48
 pycparser==2.19
+pycryptodome==3.9.7
 PyGetWindow==0.0.7
 PyMouse==1.0
 PyMsgBox==1.0.7
@@ -34,10 +39,13 @@ pytelegram-bot==0.1
 pyTelegramBotAPI==3.6.6
 pytesseract==0.3.0
 python-telegram-bot==12.2.0
+python3-xlib==0.15
 PyTweening==1.0.3
 pytz==2019.2
+PyYAML==5.3
 requests==2.22.0
 selenium==3.141.0
+shellescape==3.8.1
 six==1.12.0
 soupsieve==1.9.4
 sqlparse==0.3.0
