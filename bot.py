@@ -10,7 +10,7 @@ import telegram
 import datetime
 import re
 
-TG_TOKEN = '968188661:AAEF4JBqD5OzPDK9I2LfTeQp-Jlr_Zd37u4'
+TG_TOKEN = "968188661:AAHL7cMXXsej4c2KaNIF0llikNoSOWyTzRg"
 head = {'accept': '*/*',
 		"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"}
 
@@ -180,7 +180,6 @@ def message_handler(bot: Bot, update: Update):
 				chat_id=update.effective_message.chat_id,
 				text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
 			)
-
 
 		def receiving_data(year, month, day):
 			if len(str(day)) == 1:
