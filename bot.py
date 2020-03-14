@@ -8,6 +8,12 @@ from bs4 import BeautifulSoup as bs
 import random
 import datetime
 import re
+import csv
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+
 
 TG_TOKEN = "968188661:AAHL7cMXXsej4c2KaNIF0llikNoSOWyTzRg"
 head = {'accept': '*/*',
@@ -24,6 +30,33 @@ def message_handler(bot: Bot, update: Update):
 
 	text = update.effective_message.text
 	reply_text = f'Ну здарова {name}\n\n{text}'
+
+	if 'gra' in text:
+		rng = np.arange(50)
+		rnd = np.random.randint(0, 10, size=(3, rng.size))
+		yrs = 1950 + rng
+
+		fig, ax = plt.subplots(figsize=(5, 3))
+		ax.stackplot(yrs, rng + rnd, labels=['Eastasia', 'Eurasia', 'Oceania'])
+		ax.set_title('Combined debt growth over time')
+		ax.legend(loc='upper left')
+		ax.set_ylabel('Total debt')
+		ax.set_xlim(xmin=yrs[0], xmax=yrs[-1])
+		fig.tight_layout()
+		a = fig.savefig('www.png')
+
+		#a = plt.show()
+		print('a')
+		photo = open("www.png", "rb")
+
+		bot.send_photo(
+			chat_id=update.effective_message.chat_id,
+			photo=photo,
+
+		)
+
+
+
 
 	if '/dol' in text:
 		headers = head
