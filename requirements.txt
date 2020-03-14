@@ -15,7 +15,7 @@ cycler==0.10.0
 Cython==0.29.13
 decorator==4.4.2
 demjson==2.2.4
-Django==2.2.5
+Django==2.2.10
 Flask==1.1.1
 future==0.18.0
 html5lib==1.0.1
