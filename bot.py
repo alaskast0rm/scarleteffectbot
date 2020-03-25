@@ -10,11 +10,7 @@ import datetime
 import re
 import csv
 import numpy as np
-import pandas as pd
-import matplotlib as mpl
-import seaborn as sns
-import matplotlib.pyplot as plt
-import warnings; warnings.filterwarnings(action='once')
+
 
 
 
@@ -35,96 +31,6 @@ def message_handler(bot: Bot, update: Update):
 
 	text = update.effective_message.text
 	reply_text = f'Ну здарова {name}\n\n{text}'
-
-	if 'ga' in text:
-		large = 22
-		med = 16
-		small = 12
-		params = {'axes.titlesize': large,
-				  'legend.fontsize': med,
-				  'figure.figsize': (16, 10),
-				  'axes.labelsize': med,
-				  'axes.titlesize': med,
-				  'xtick.labelsize': med,
-				  'ytick.labelsize': med,
-				  'figure.titlesize': large}
-		plt.rcParams.update(params)
-		plt.style.use('seaborn-whitegrid')
-		sns.set_style("white")
-
-		# Version
-		print(mpl.__version__)  # > 3.0.0
-		print(sns.__version__)  # > 0.9.0
-
-		# rng = np.arange(50)
-		# rnd = np.random.randint(0, 10, size=(3, rng.size))
-		# yrs = 2000 + rng
-		#
-		# fig, ax = plt.subplots(figsize=(5, 3))
-		# ax.stackplot(yrs, rng + rnd, labels=['Eastasia', 'Eurasia', 'Oceania'])
-		# ax.set_title('Combined debt growth over time')
-		# ax.legend(loc='upper left')
-		# ax.set_ylabel('Total debt')
-		# ax.set_xlim(xmin=yrs[0], xmax=yrs[-1])
-		# fig.tight_layout()
-		# x = np.arange(0, 5, 0.1)
-		# y = x*2 + 2 - 20 + (1 / 120)
-		# plt.figure(dpi=200)
-		# plt.plot(x, y)
-		# plt.xlabel('Сашенька хуй саси')
-		# plt.ylabel('хихихихи')
-		# plt.savefig('www.png')
-		# #a = plt.show()
-		# print('a')
-		# photo = open("www.png", "rb")
-		# Import Data
-		df = pd.read_csv('dataa.csv')
-
-		print(df)
-
-		# Draw Plot
-		plt.figure(figsize=(16, 10), dpi=80)
-		print('figure')
-		plt.plot('date', 'low', data=df, color='red')
-
-		print('Draw')
-
-		# Decoration
-		plt.ylim(50, 750)
-		xtick_location = df.index.tolist()[::366]
-		xtick_labels = [x[:4] for x in df.date.tolist()[::366]]
-		plt.xticks(ticks=xtick_location, labels=xtick_labels, rotation=0, fontsize=12, horizontalalignment='center',
-				   alpha=.7)
-		plt.yticks(fontsize=12, alpha=.7)
-		plt.title("Air Passengers Traffic (1949 - 1969)", fontsize=22)
-		plt.grid(axis='both', alpha=.3)
-
-		print('Decoration')
-
-		# Remove borders
-		plt.gca().spines["top"].set_alpha(0.0)
-		print('top')
-		plt.gca().spines["bottom"].set_alpha(0.3)
-		print('bottom')
-		plt.gca().spines["right"].set_alpha(0.0)
-		print('right')
-		plt.gca().spines["left"].set_alpha(0.3)
-		print('left')
-		plt.savefig('ww4w.png')
-
-		print('Save')
-
-		photo = open('ww4w.png', 'rb')
-
-		print('Open')
-
-		bot.send_photo(
-			chat_id=update.effective_message.chat_id,
-			photo=photo,
-
-		)
-		print("Send")
-
 
 	if '/dol' in text:
 		url = 'http://www.profinance.ru/currency_usd.asp'
