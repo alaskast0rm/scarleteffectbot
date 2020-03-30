@@ -12,10 +12,6 @@ import csv
 import numpy as np
 
 
-
-
-
-
 TG_TOKEN = "968188661:AAHL7cMXXsej4c2KaNIF0llikNoSOWyTzRg"
 head = {'accept': '*/*',
 		"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"}
@@ -34,31 +30,30 @@ def message_handler(bot: Bot, update: Update):
 
 	if '/dol' in text:
 		url = 'http://www.profinance.ru/currency_usd.asp'
-		sesion = requests.Session()
-		request = sesion.get(url, headers=head)
 
-		if request.status_code == 200:
-			soup = bs(request.content, 'html.parser')
+		try:
+			session = requests.Session()
+			request = session.get(url, headers=head)
 
-			td_cb = soup.find_all('td', attrs={'align': "center", 'class': 'cell'})
+			if request.status_code == 200:
+				soup = bs(request.content, 'html.parser')
 
-			name_cb = td_cb[0].text
-			from_date_cb = td_cb[1].text
-			on_date_cb = td_cb[2].text
-			value_from_date_cb = td_cb[5].text
-			value_on_date_cb = td_cb[6].text
-			name_forex = td_cb[-6].text
-			date_forex = td_cb[-5].text
-			name_moscow = td_cb[-4].text
-			date_moscow = td_cb[-3].text
-			value_forex = td_cb[-2].text
-			value_moscow = td_cb[-1].text
-			print(value_moscow)
+				td_cb = soup.find_all('td', attrs={'align': "center", 'class': 'cell'})
 
-			reply_text = name_cb + from_date_cb + value_from_date_cb + on_date_cb + value_on_date_cb + name_forex + '\n' + date_forex + '\n' + value_forex + '\n' + name_moscow + '\n' + date_moscow + '\n' + value_moscow
-			print(reply_text)
+				on_date_cb = td_cb[1].text
+				from_date_cb = td_cb[2].text
+				value_on_date_cb = td_cb[5].text
+				value_from_date_cb = td_cb[6].text
+				date_forex = td_cb[-5].text
+				date_moscow = td_cb[-3].text
+				value_forex = td_cb[-2].text
+				value_moscow = td_cb[-1].text
+				symbols = '-----------------------------'
 
-		else:
+				reply_text = symbols + '\n' + 'ЦБ' + on_date_cb[0:14] + value_on_date_cb[0:8] + '\n' + from_date_cb[0:13] + value_from_date_cb + symbols + '\n' + 'Forex' + '\n' + date_forex + '\n' + value_forex + '\n' + symbols + '\n' + 'Moscow' + '\n' + date_moscow + '\n' + value_moscow
+			else:
+				reply_text = "Ошибка с подклюючением."
+		except:
 			reply_text = "Ошибка с подклюючением."
 
 		bot.send_message(
@@ -68,32 +63,38 @@ def message_handler(bot: Bot, update: Update):
 
 	if '/pyhh' in text:
 		url = 'https://hh.ru/search/vacancy?only_with_salary=false&clusters=true&area=1&enable_snippets=true&salary=&st=searchVacancy&text=Python+junior'
-		headers = head
-		session = requests.Session()
-		request = session.get(url, headers=headers)
 
-		if request.status_code == 200:
-			soup = bs(request.content, 'html.parser')
-			divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
-			counter = 0
-			response = ''
+		try:
 
-			for div in divs:
-				counter += 1
-				divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
-				divka_https = div.find('a', href=True)
-				mod_divka_https = divka_https['href']
+			headers = head
+			session = requests.Session()
+			request = session.get(url, headers=headers)
 
-				def result(divka):
-					return '\n'.join(str(divka) for i in range(1))
+			if request.status_code == 200:
+				soup = bs(request.content, 'html.parser')
+				divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
+				counter = 0
+				response = ''
+				print(soup)
 
-				def result_https(mod_divka_https):
-					return '\n'.join(str(mod_divka_https) for i in range(1))
+				for div in divs:
+					counter += 1
+					divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
+					divka_https = div.find('a', href=True)
+					mod_divka_https = divka_https['href']
 
-				response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https)}\n"
-			reply_text = response
+					def result(divka):
+						return '\n'.join(str(divka) for i in range(1))
 
-		else:
+					def result_https(mod_divka_https):
+						return '\n'.join(str(mod_divka_https) for i in range(1))
+
+					response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https)}\n"
+				reply_text = response
+
+			else:
+				reply_text = "Ошибка с подклюючением."
+		except:
 			reply_text = "Ошибка с подклюючением."
 
 		bot.send_message(
@@ -103,31 +104,35 @@ def message_handler(bot: Bot, update: Update):
 
 	if '/adhh' in text:
 		url = 'https://hh.ru/search/vacancy?only_with_salary=false&clusters=true&area=1&enable_snippets=true&salary=&st=searchVacancy&text=%D0%9C%D0%BB%D0%B0%D0%B4%D1%88%D0%B8%D0%B9+%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%BD%D1%8B%D0%B9+%D0%B0%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80&from=suggest_post'
-		headers = head
-		session = requests.Session()
-		request = session.get(url, headers=headers)
 
-		if request.status_code == 200:
-			soup = bs(request.content, 'html.parser')
-			divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
-			counter = 0
-			response = ''
-			for div in divs:
-				counter += 1
-				divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
-				divka_https = div.find('a', href=True)
-				mod_divka_https = divka_https['href']
+		try:
+			headers = head
+			session = requests.Session()
+			request = session.get(url, headers=headers)
 
-				def result(divka):
-					return '\n'.join(str(divka) for i in range(1))
+			if request.status_code == 200:
+				soup = bs(request.content, 'html.parser')
+				divs = soup.find_all('div', attrs={'data-qa': "vacancy-serp__vacancy"})
+				counter = 0
+				response = ''
+				for div in divs:
+					counter += 1
+					divka = div.find('div', attrs={'class': "vacancy-serp-item__row vacancy-serp-item__row_header"}).text
+					divka_https = div.find('a', href=True)
+					mod_divka_https = divka_https['href']
 
-				def result_https(mod_divka_https):
-					return '\n'.join(str(mod_divka_https) for i in range(1))
+					def result(divka):
+						return '\n'.join(str(divka) for i in range(1))
 
-				response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https).split('?')[0]}\n"
-			reply_text = response
+					def result_https(mod_divka_https):
+						return '\n'.join(str(mod_divka_https) for i in range(1))
 
-		else:
+					response += f'{counter}) ' + str(result(divka)) + f"\n{result_https(mod_divka_https).split('?')[0]}\n"
+				reply_text = response
+
+			else:
+				reply_text = "Ошибка с подклюючением."
+		except:
 			reply_text = "Ошибка с подклюючением."
 
 		bot.send_message(
@@ -154,15 +159,14 @@ def message_handler(bot: Bot, update: Update):
 			message_id=global_msg.message_id,
 		)
 
-	if '/veven' in text:
-		print('veven')
+	if '/seven' in text:
 
 		bot.send_message(
 			chat_id=update.effective_message.chat_id,
 			text="Пожалуйста, подождите пару секунд.",
 		)
 
-		url = "1https://studga.wohlnet.ru/d/full?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1"
+		url = "https://studga.wohlnet.ru/d/full?fac=3&flow=188&grp=2&lsubgrp=3&esubgrp=1"
 		headers = head
 		session = requests.Session()
 		request = session.get(url, headers=headers)
@@ -178,22 +182,22 @@ def message_handler(bot: Bot, update: Update):
 					day = int(str(check_day).split("'")[1].split('.')[0])
 					month = int(str(check_month).split('.')[-1].split("'")[0])
 					year = 2020
-				except:
+				except None:
 					bot.send_message(
 						chat_id=update.effective_message.chat_id,
-						text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+						text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.02"
 					)
 
 				if day > 31 or month > 12 or day == 0 or month == 0:
 
-					text = " ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+					text = " ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.02"
 			else:
-				text = " ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+				text = " ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.02"
 				bot.send_message(
 					chat_id=update.effective_message.chat_id,
 					text=text
 				)
-		elif text == '/veven@scarlet_effect_bot' or text == '/veven':
+		elif text == '/seven@scarlet_effect_bot' or text == '/seven':
 			if request.status_code == 200:
 				soup = bs(request.content, 'html.parser')
 				try:
@@ -220,7 +224,7 @@ def message_handler(bot: Bot, update: Update):
 		else:
 			bot.send_message(
 				chat_id=update.effective_message.chat_id,
-				text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.12"
+				text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" + "		/seven 02.02"
 			)
 
 		def receiving_data(year, month, day):
@@ -282,7 +286,7 @@ def message_handler(bot: Bot, update: Update):
 		if day > 31 or month > 12:
 			bot.send_message(
 				chat_id=update.effective_message.chat_id,
-				text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" +"		/seven 02.12"
+				text=" ❌ Неправильный ввод !\n" + "✅ Пример правильного ввода:\n" +"		/seven 02.02"
 			)
 		else:
 
@@ -525,46 +529,51 @@ def message_handler(bot: Bot, update: Update):
 					date = f'{now_day}.{now_month}.{now_year}'
 
 			if (len(now_day) == 2) or (len(now_month) == 2) or (len(day) == 2 and len(month) == 2):
-				session = requests.Session()
-				request = session.get(url, headers=head)
 
-				if request.status_code == 200:
-					soup = bs(request.content, 'html.parser')
-					tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
-					counter = 1
-					output = ''
-					output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
-					date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
+				try:
 
-					for table in tbody:
-						output_table_para = table.find('td', {
-							'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
+					session = requests.Session()
+					request = session.get(url, headers=head)
 
-						output_table_time = table.find('td', {
-							'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
+					if request.status_code == 200:
+						soup = bs(request.content, 'html.parser')
+						tbody = soup.find_all('tr', {'style': "background-color: #FFFFFF; "})
+						counter = 1
+						output = ''
+						output_table_day_of_the_week = soup.find('center').find_all('b')[-1].text
+						date_and_day_of_the_week = '📅 ' + date + ' - ' + output_table_day_of_the_week + '\n'
 
-						output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
+						for table in tbody:
+							output_table_para = table.find('td', {
+								'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('strong').text
 
-						output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find('small').text
+							output_table_time = table.find('td', {
+								'style': "width: 70px; border: 1px solid #000000; text-align: center;"}).find('small').text
 
-						output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
+							output_table_subject = table.find('td', {'style': "border: 1px solid #000000"}).find('b').text
 
-						output_table_kind = soup.find_all('i')[counter].text
+							output_table_teacher = table.find('td', {'style': "border: 1px solid #000000"}).find('small').text
 
-						counter += 2
+							output_table_aud = table.find('td', {'style': "border: 1px solid #000000"}).find('i').text
 
-						output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
-								  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
-								  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n'
+							output_table_kind = soup.find_all('i')[counter].text
 
-					reply_text = date_and_day_of_the_week + output
+							counter += 2
 
-					if len(output) == 0:
-						reserve_responce = soup.find('table', {'class': 'shadow'}).find('strong').text
-						reply_text = date_and_day_of_the_week + reserve_responce
-						if "Имеется новое расписание, занятия ещё не начались" in reserve_responce:
-							reply_text = "❌ Неправильный ввод !"
-				else:
+							output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
+									  '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
+									  + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n'
+
+						reply_text = date_and_day_of_the_week + output
+
+						if len(output) == 0:
+							reserve_responce = soup.find('table', {'class': 'shadow'}).find('strong').text
+							reply_text = date_and_day_of_the_week + reserve_responce
+							if "Имеется новое расписание, занятия ещё не начались" in reserve_responce:
+								reply_text = "❌ Неправильный ввод !"
+					else:
+						reply_text = "Ошибка с подклюючением."
+				except:
 					reply_text = "Ошибка с подклюючением."
 			else:
 				reply_text = "❌ Неправильный ввод !"
@@ -600,60 +609,64 @@ def message_handler(bot: Bot, update: Update):
 	if '/weather' in text:
 		headers = head
 		url_time = "https://voshod-solnca.ru/time/%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%B0"
-		session_time = requests.Session()
-		request_time = session_time.get(url_time, headers=headers)
-		soup_time = bs(request_time.content, 'html.parser')
-		body_time = soup_time.find('span', attrs={'id': "exact-time0"}).text
-		moscow_time = 'Время: ' + body_time
 
-		url = "https://yandex.ru/pogoda/moscow?lat=55.85489273&lon=37.47623444&name=%D0%BC%D0%B5%D1%82%D1%80%D0%BE%20%D0%A0%D0%B5%D1%87%D0%BD%D0%BE%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB%2C%20%D0%97%D0%B0%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%BE%D1%80%D0%B5%D1%86%D0%BA%D0%B0%D1%8F%20%D0%BB%D0%B8%D0%BD%D0%B8%D1%8F%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0&kind=metro"
-		session = requests.Session()
-		request = session.get(url, headers=headers)
+		try:
+			session_time = requests.Session()
+			request_time = session_time.get(url_time, headers=headers)
+			soup_time = bs(request_time.content, 'html.parser')
+			body_time = soup_time.find('span', attrs={'id': "exact-time0"}).text
+			moscow_time = 'Время: ' + body_time
 
-		if request.status_code == 200:
-			soup = bs(request.content, 'html.parser')
-			divs_now = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
+			url = "https://yandex.ru/pogoda/moscow?lat=55.85489273&lon=37.47623444&name=%D0%BC%D0%B5%D1%82%D1%80%D0%BE%20%D0%A0%D0%B5%D1%87%D0%BD%D0%BE%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB%2C%20%D0%97%D0%B0%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%BE%D1%80%D0%B5%D1%86%D0%BA%D0%B0%D1%8F%20%D0%BB%D0%B8%D0%BD%D0%B8%D1%8F%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0&kind=metro"
+			session = requests.Session()
+			request = session.get(url, headers=headers)
 
-			def temperature_now(divs_now):
-				for div in divs_now:
-					output_now = div.find('span', attrs={'class': 'temp__value'}).text
-					return "Температура: " + output_now + '°\n'
+			if request.status_code == 200:
+				soup = bs(request.content, 'html.parser')
+				divs_now = soup.find_all('div', attrs={'class': 'temp fact__temp fact__temp_size_s'})
 
-			divs_feels = soup.find_all('div', attrs={'class': 'link__feelings fact__feelings'})
+				def temperature_now(divs_now):
+					for div in divs_now:
+						output_now = div.find('span', attrs={'class': 'temp__value'}).text
+						return "Температура: " + output_now + '°\n'
 
-			def temperature_feels(divs_feels):
-				for div in divs_feels:
-					output_feels = div.find('span', attrs={'class': 'temp__value'}).text
-					return "Ощущается как: " + output_feels + '°\n'
+				divs_feels = soup.find_all('div', attrs={'class': 'link__feelings fact__feelings'})
 
-			def yesterday_temperature():
-				output_yesterday_temperature = soup.find('div', attrs={'class': 'fact__time-yesterday-wrap'}).find('span', attrs={'class': 'temp__value'}).text
-				return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
+				def temperature_feels(divs_feels):
+					for div in divs_feels:
+						output_feels = div.find('span', attrs={'class': 'temp__value'}).text
+						return "Ощущается как: " + output_feels + '°\n'
 
-			divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
-			
-			if divs_condition == 'Дождь со снегом':
-				emoji = ' 🌧🌨'
-			elif divs_condition == 'Небольшой дождь' or divs_condition == 'Дождь':
-				emoji = ' 🌧'
-			elif divs_condition == 'Пасмурно':
-				emoji = ' ☁️'
-			elif divs_condition == 'Снег' or divs_condition == 'Небольшой снег':
-				emoji = ' 🌨'
-			elif divs_condition == 'Облачно':
-				emoji = ' ⛅️'
-			elif divs_condition == 'Солнечно' or divs_condition == 'Ясно':
-				emoji = ' ☀️'
-			elif divs_condition == 'Облачно с прояснениями':
-				emoji = ' 🌥'
+				def yesterday_temperature():
+					output_yesterday_temperature = soup.find('div', attrs={'class': 'fact__time-yesterday-wrap'}).find('span', attrs={'class': 'temp__value'}).text
+					return '\nВчера в это время: ' + output_yesterday_temperature + '°\n'
+
+				divs_condition = soup.find('div', {'class': "link__feelings fact__feelings"}).find('div').text
+
+				if divs_condition == 'Дождь со снегом':
+					emoji = ' 🌧🌨'
+				elif divs_condition == 'Небольшой дождь' or divs_condition == 'Дождь':
+					emoji = ' 🌧'
+				elif divs_condition == 'Пасмурно':
+					emoji = ' ☁️'
+				elif divs_condition == 'Снег' or divs_condition == 'Небольшой снег':
+					emoji = ' 🌨'
+				elif divs_condition == 'Облачно':
+					emoji = ' ⛅️'
+				elif divs_condition == 'Солнечно' or divs_condition == 'Ясно':
+					emoji = ' ☀️'
+				elif divs_condition == 'Облачно с прояснениями':
+					emoji = ' 🌥'
+				else:
+					emoji = ''
+
+				response = str(temperature_now(divs_now)) + str(
+					temperature_feels(divs_feels)) + str(divs_condition) + emoji + str(yesterday_temperature()) + str(moscow_time)
+				reply_text = response
+
 			else:
-				emoji = ''
-
-			response = str(temperature_now(divs_now)) + str(
-				temperature_feels(divs_feels)) + str(divs_condition) + emoji + str(yesterday_temperature()) + str(moscow_time)
-			reply_text = response
-
-		else:
+				reply_text = "Ошибка с подклюючением."
+		except:
 			reply_text = "Ошибка с подклюючением."
 
 		bot.send_message(
