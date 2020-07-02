@@ -27,6 +27,7 @@ def get_rate_date():
 
 
 while True:
+    print('24')
     received_data = get_rate_date()
 
     if len(received_data) == 2:
