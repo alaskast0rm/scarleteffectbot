@@ -1,1 +1,3 @@
-worker: python GetInputDataIntoDb2h.py; python GetInputDataIntoDb24h.py; python bot.py
+clock: python GetInputDataIntoDb2h.py
+clock: python GetInputDataIntoDb24h.py
+worker: python bot.py
