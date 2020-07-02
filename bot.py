@@ -18,6 +18,7 @@ head = {'accept': '*/*',
 
 def message_handler(bot: Bot, update: Update):
     text = update.effective_message.text
+    print('b')
 
     if '/dol' in text or '/dol@scarlet_effect_bot' in text:
         if len(text) == 4 or len(text) == 23:
