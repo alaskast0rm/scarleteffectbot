@@ -598,13 +598,13 @@ def message_handler(bot: Bot, update: Update):
             )
 
     if '/btc' in text:
-        command = text
-        data = get_data(command=command)
-        bot.send_photo(
-        	chat_id=update.effective_message.chat_id,
-        	photo=data,
-
-        )
+        if len(text) <= 5:
+            command = text
+            data = get_data(command=command)
+            bot.send_photo(
+                chat_id=update.effective_message.chat_id,
+                photo=data,
+            )
 
     if '/weather' in text or '/weather@scarlet_effect_bot' in text:
         if len(text) == 8 or len(text) == 27:

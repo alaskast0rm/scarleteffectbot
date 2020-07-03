@@ -7,9 +7,9 @@ date = (datetime.datetime.now() + datetime.timedelta(hours=3)).strftime("%Y-%d-%
 
 
 def get_data(command):
-    if command == '/btc1' or command == '/btc5':
+    if command == '/btc' or command == '/btc5':
         db_name = 'DbOf2HourValues.db'
-        if command == '/btc1':
+        if command == '/btc':
             limit = 12
             width = 15
             height = 6
