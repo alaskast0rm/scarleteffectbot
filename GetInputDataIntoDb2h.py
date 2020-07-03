@@ -17,15 +17,13 @@ def getting_rate_date():
       'X-CMC_PRO_API_KEY': '000de33c-f464-4660-ae72-ef4a47a11a68',
     }
 
-    session = Session()
-    session.headers.update(headers)
-
     try:
-        date = str(datetime.datetime.now() + datetime.timedelta(hours=3))[:-10]
-        print(date)
+        session = Session()
+        session.headers.update(headers)
         response = session.get(url, params=parameters)
         data = json.loads(response.text)
         rate = data['data'][0]['quote']['USD']['price']
+        date = (datetime.datetime.now() + datetime.timedelta(hours=3)).strftime("%Y-%d-%m %H:%M")
         return date, rate
     except:
         return 'Error'
@@ -43,10 +41,6 @@ while True:
         c = conn.cursor()
 
         c.execute("INSERT INTO BTC VALUES (?, ?)", (received_date, received_rate))
-
-        # c.execute("SELECT * FROM BTC WHERE date LIKE '{}%'".format(received_date))
-        #
-        # print(c.fetchall())
 
         conn.commit()
 

@@ -22,6 +22,7 @@ def message_handler(bot: Bot, update: Update):
     if '/dol' in text or '/dol@scarlet_effect_bot' in text:
         if len(text) == 4 or len(text) == 23:
             url = 'http://www.profinance.ru/currency_usd.asp'
+
             try:
                 session = requests.Session()
                 request = session.get(url, headers=head)
@@ -38,7 +39,7 @@ def message_handler(bot: Bot, update: Update):
                     date_forex = td_cb[-5].text
                     date_moscow = td_cb[-3].text
                     value_forex = td_cb[-2].text
-                    value_moscow = td_cb[-1].text
+                    value_moscow = td_cb[-1].ext
                     symbols = '-----------------------------'
 
                     reply_text = symbols + '\n' + 'ЦБ' + on_date_cb[0:14] + value_on_date_cb[0:8] + '\n' + from_date_cb[0:13] + value_from_date_cb + symbols + '\n' + 'Forex' + '\n' + date_forex + '\n' + value_forex + '\n' + symbols + '\n' + 'Moscow' + '\n' + date_moscow + '\n' + value_moscow
@@ -55,8 +56,8 @@ def message_handler(bot: Bot, update: Update):
     if '/pyhh' in text or '/pyhh@scarlet_effect_bot' in text:
         if len(text) == 5 or len(text) == 24:
             url = 'https://hh.ru/search/vacancy?only_with_salary=false&clusters=true&area=1&enable_snippets=true&salary=&st=searchVacancy&text=Python+junior'
-            try:
 
+            try:
                 headers = head
                 session = requests.Session()
                 request = session.get(url, headers=headers)
@@ -153,7 +154,6 @@ def message_handler(bot: Bot, update: Update):
 
     if '/seven' in text or '/seven@scarlet_effect_bot' in text:
         if len(text) == 6 or len(text) == 25:
-
             bot.send_message(
                 chat_id=update.effective_message.chat_id,
                 text="Пожалуйста, подождите пару секунд.",
@@ -193,16 +193,19 @@ def message_handler(bot: Bot, update: Update):
             elif text == '/seven@scarlet_effect_bot' or text == '/seven':
                 if request.status_code == 200:
                     soup = bs(request.content, 'html.parser')
+
                     try:
                         body_today = soup.find('tr', attrs={'style': "height: 60px;", 'class': "tr_today"})
                         date = body_today.find('a')['href']
                     except AttributeError:
                         body_tomorrow = soup.find('tr', attrs={'style': "height: 60px;", 'class': "tr_tomorrow"})
                         date = body_tomorrow.find('a')['href']
+
                     new_date = date.split('=')[-1]
                     day = new_date[8:]
                     month = int(new_date[5:7])
                     year = int(new_date[:4])
+
                     if day[0] == 0:
                         day = int(day[1])
                     else:
@@ -262,6 +265,7 @@ def message_handler(bot: Bot, update: Update):
                             output += '\n◽️ ' + output_table_para + '\n🕙 ' + output_table_time + \
                                       '\n📖 ' + output_table_subject + '\n👤 ' + output_table_teacher \
                                       + '\n🏢 ' + output_table_aud + '\n⚪️ ' + output_table_kind + '\n\n'
+
                         if len(output) == 0:
                             output = 'Пар нет, отдыхаем '
 
@@ -307,6 +311,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -322,6 +327,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -337,6 +343,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -352,6 +359,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -367,6 +375,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -382,6 +391,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -397,6 +407,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -412,6 +423,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -427,6 +439,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -442,6 +455,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"
@@ -457,6 +471,7 @@ def message_handler(bot: Bot, update: Update):
                             reply_text = receiving_data(year, month, day)
                             day += 1
                             counter -= 1
+
                         bot.send_message(
                             chat_id=update.effective_message.chat_id,
                             text=reply_text + "\n"

@@ -1,3 +1,4 @@
+import datetime
 import sqlite3
 from time import sleep
 from bs4 import BeautifulSoup as bs
@@ -16,10 +17,10 @@ def get_rate_date():
     if request.status_code == 200:
         soup = bs(request.content, 'html.parser')
         data = soup.find('tbody').find('tr').find_all('td')
-        date = data[0].text
         high_rate = data[2].text[:-3].replace(',', '')
         low_rate = data[3].text[:-3].replace(',', '')
         average_rate = (int(high_rate) + int(low_rate)) // 2
+        date = (datetime.datetime.now() + datetime.timedelta(hours=3)).strftime("%Y-%d-%m %H:%M")
         return date, average_rate
     else:
         return 'Error'
@@ -31,7 +32,6 @@ while True:
     if len(received_data) == 2:
         received_date = received_data[0]
         received_rate = str(received_data[1])
-        print('{}\n{}'.format(received_date, received_rate))
 
         conn = sqlite3.connect('DbOf24HourValues.db')
 
@@ -39,10 +39,8 @@ while True:
 
         c.execute("INSERT INTO BTC VALUES(?, ?)", (received_date, received_rate))
 
-        c.fetchall()
-
         conn.commit()
 
         conn.close()
 
-        sleep(60)
+        sleep(86400)
